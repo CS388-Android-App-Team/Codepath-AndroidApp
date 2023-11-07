@@ -76,8 +76,9 @@
 <br>
 
 ### [BONUS] Digital Wireframes & Mockups
-
+Link to figma design [https://www.figma.com/file/1eegLr3oE20fjJgw0dpohq/App-Design?type=design&node-id=0%3A1&mode=design&t=hPCJWtpozmqfsius-1](https://www.figma.com/file/1eegLr3oE20fjJgw0dpohq/App-Design?type=design&node-id=0%3A1&mode=design&t=hPCJWtpozmqfsius-1 "https://www.figma.com/file/1eegLr3oE20fjJgw0dpohq/App-Design?type=design&node-id=0%3A1&mode=design&t=hPCJWtpozmqfsius-1")
 ### [BONUS] Interactive Prototype
+Link to figma prototype [https://www.figma.com/proto/1eegLr3oE20fjJgw0dpohq/App-Design?type=design&node-id=7-39&t=HUbtfzuOCPF7R0j4-1&scaling=scale-down&page-id=0%3A1&starting-point-node-id=7%3A39&mode=design](https://www.figma.com/proto/1eegLr3oE20fjJgw0dpohq/App-Design?type=design&node-id=7-39&t=HUbtfzuOCPF7R0j4-1&scaling=scale-down&page-id=0%3A1&starting-point-node-id=7%3A39&mode=design "https://www.figma.com/proto/1eegLr3oE20fjJgw0dpohq/App-Design?type=design&node-id=7-39&t=HUbtfzuOCPF7R0j4-1&scaling=scale-down&page-id=0%3A1&starting-point-node-id=7%3A39&mode=design")
 
 <br>
 
