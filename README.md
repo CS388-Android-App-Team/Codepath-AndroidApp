@@ -13,7 +13,7 @@
 
 ### Description
 
-This application would aim to encourage users to complete as many of their daily goals as possible, while adding a reward and social aspect to maintain consistency. The general theme will be video-games, with related art, sounds, and terminology. Users will be able to set their own tasks and record the completion, and upon completion, post their success with an optional accompanying image. The like button can be an “applaud button”, and comments likely won’t be featured to reduce opportunity for negativity. You will only be able to see others’ posts by both of you adding each other as friends. Statistics like streaks, average completion rates, and other custom trackers can be displayed on the user’s profile for additional incentives to get to work. Push notifications will be used to remind users of their set goals for the day, with potential for random encouraging messages.
+Completionist aims to encourage users to complete as many of their daily goals as possible, while adding a reward and social aspect to maintain consistency. The general theme will be video-games, with related art, sounds, and terminology. Users will be able to set their own tasks of varying categories and record the completion, and upon completion, post their success with an optional accompanying image. You will only be able to see your friends' posts, and you will be able to applaud their successes similar to liking posts. Statistics like streaks, average completion rates, and other custom trackers can be displayed on the user’s profile for additional incentives to get to work. Push notifications will be used to remind users of their set goals for the day, with potential for random encouraging messages.
 
 ### App Evaluation
 
