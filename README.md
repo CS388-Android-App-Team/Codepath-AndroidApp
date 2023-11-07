@@ -69,22 +69,6 @@ Completionist aims to encourage users to complete as many of their daily goals a
 - Calendar Page (stretch)
   - A calendar view for users to plan and view tasks over a longer period (weekly, monthly).
 
-### 3. Navigation
-
-**Tab Navigation** (Tab to Screen)
-
-* [fill out your first tab]
-* [fill out your second tab]
-* [fill out your third tab]
-
-**Flow Navigation** (Screen to Screen)
-
-- [list first screen here]
-  - [list screen navigation here]
-  - ...
-- [list second screen here]
-  - [list screen navigation here]
-  - ...
 
 ## Wireframes
 <img width="876" alt="Screenshot 2023-11-06 at 11 34 17 PM" src="https://github.com/CS388-Android-App-Team/Codepath-AndroidApp/assets/98663272/db4e5de3-0a81-412e-912c-61366887c3c9">
