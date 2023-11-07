@@ -1,7 +1,6 @@
-# CS388-Android-App
-## Gamified Task manager app
+# Completionist
 
-# Milestone 1 - Completionist (Unit 7)
+# Milestone 1 - (Unit 7)
 
 ## Table of Contents
 
