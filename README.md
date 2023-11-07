@@ -30,24 +30,45 @@ This application would aim to encourage users to complete as many of their daily
 
 **Required Features**
 
-1. [fill in your required user features here]
-2. ...
-3. ...
+1. Task Management: Users can set personal tasks/goals with deadlines and track their completion status.
+2. Gamified Rewards System: Upon task completion, users earn virtual rewards which could be points, badges, or leveling up within the app.
+3. Social Connectivity: Users can add friends to share their achievements with, fostering a supportive community.
+4. Statistics and Tracking: Users have access to their performance statistics like streaks and average completion rates.
+5. Push Notifications: Users receive daily reminders for tasks and random motivational messages to maintain consistent app engagement.
+6. Multimedia Sharing: Users can post their success with optional images to share their achievements.
 
 **Optional Features**
 
-1. [fill in your optional user features here]
-2. ...
-3. ...
+1. Calendar Integration: A stretch feature for week planning and viewing tasks in a calendar format.
+2. Mini-Games as Rewards: Unlocking small games to play as a reward for task completion.
+3. Advanced Profile Customization: Additional options for users to personalize their profiles with more detailed statistics and themes.
+4. Additional Social Features: More interactive features such as challenges between friends or group goals.
 
 ### 2. Screen Archetypes
 
-- [list first screen here]
-  - [list associated required story here]
-  - ...
-- [list second screen here]
-  - [list associated required story here]
-  - ...
+- Login / Sign up page
+  - Users can create a new account or log into an existing account.
+
+- Home Page
+  - Users are greeted with an overview of daily tasks and motivational elements.
+
+- Profile Page
+  - Displays user stats, badges, and achievements with customization options.
+
+- Friends List
+  - Shows the user's added friends and allows for managing social connections.
+
+- Settings Page
+  - Allows users to configure app settings, notification preferences, and account details.
+  
+- Task List Page
+  - Users can view their current tasks, check them off, or add new ones.
+
+- Task Entry Page
+  - Users can input new tasks/goals with relevant details such as deadlines and reward settings.
+
+- Calendar Page (stretch)
+  - A calendar view for users to plan and view tasks over a longer period (weekly, monthly).
 
 ### 3. Navigation
 
