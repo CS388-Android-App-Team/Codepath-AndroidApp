@@ -67,8 +67,7 @@ Completionist aims to encourage users to complete as many of their daily goals a
   - ...
 
 ## Wireframes
-
-[Add picture of your hand sketched wireframes in this section] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img width="876" alt="Screenshot 2023-11-06 at 11 34 17 PM" src="https://github.com/CS388-Android-App-Team/Codepath-AndroidApp/assets/98663272/db4e5de3-0a81-412e-912c-61366887c3c9">
 
 <br>
 
