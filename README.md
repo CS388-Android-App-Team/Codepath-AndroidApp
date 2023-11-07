@@ -68,6 +68,52 @@ Completionist aims to encourage users to complete as many of their daily goals a
 
 - Calendar Page (stretch)
   - A calendar view for users to plan and view tasks over a longer period (weekly, monthly).
+ 
+### 3. Navigation
+
+**Tab Navigation** (Tab to Screen)
+
+* Home tab
+* Quest List tab
+* Profile tab
+* Camera tab
+* Settings tab
+
+**Flow Navigation** (Screen to Screen)
+
+- loading screen
+  - goes directly into the sign in screen
+- Sign in screen
+  - GO to homepage after signing in
+  - Go to sign up page if need to create account
+  - Go to forgot password screen if password forgotten
+- Sign up page
+  -  Goes back to sign in page after creating account
+  -  Can go back without cerating account
+- Forgot password
+  -  Goes back to sign in page after sending link
+  -  Can go back without sending link
+- Homepage
+  - Use navigation bar on bottom to change pages
+  - can go to Quest List, Profile, Camera, Settings
+ 
+- Quest List
+  - can go to Home, Profile, Camera, Settings
+  - can go to create new quest
+ 
+- New Quest
+  - Goes back to quest list after accept or reject
+  - can go to Home, Profile, Camera, Settings
+
+- Profile
+  - can go to Home, Quest, Camera, Settings
+  - Can go to part page
+ 
+- Party page
+  - Can go to Home, QUest, Profile, Camera, Settings
+ 
+- Settings
+  - Can go to Home, Quest, Profile, Camera
 
 
 ## Wireframes
