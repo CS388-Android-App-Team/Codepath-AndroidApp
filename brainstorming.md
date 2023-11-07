@@ -1,0 +1,54 @@
+# Collaborative list of app ideas
+
+- *Mock instagram*
+    - Social application that allows users to acess two feeds, one for friends and one for followed topics. Suggested content is separated from friend group content similar to Twitter's feed divide. Can incorporate some features from other apps such as post streaks from BeReal.
+- *Gamified Task Manager*
+    - This application would aim to encourage users to complete as many of their daily goals as possible, while adding a reward and social aspect to maintain consistency. The general theme will be video-gams, with related art, sounds, and terminology. Useres will be able to set their own tasks and record the completion, and upon completion, post their success with an optional accompanying image. The like button can be an "applaud button", and comments likely won't be featured to reduce opportunity for negativity. You will only be able to see other's posts by both off you adding each other as friends. Statistics like straks, average completion rates, and other custom trackers can be displayed on the user's profile for additional incentives to get to work. Push notifications will be used to remind users of their set goals for the day, with potential for random encouraging messages
+- *Quiz game*
+    - A mixed trivia quiz game that includes a set number of solo daily sets, with statistics available on a user's profiel including things like Win/Loss, best category, and daily consistency. A simplified friending system will be available with potential to add multiplayer and tag team matches where you and a friend face another duo in a speed round, this could also be available in 1 v 1's.
+- *Public transportation hub*
+    - Application that allows users to track information on public transportation, traffic intensity, busy and sslow hours, delays, etc. Different rides can be tracked, information like delays and relevant emergencies will be sent to user as push notifications. This app will also allow you to map/plan out trips both for time and cost and compute costs over time spans such as a year or semester of travel.
+- *Travel diary*
+    - This application would include a variety of features to document your trips in unique ways. Features such as map tracing, location checklists, andd easily sharable showcases of your journeys will be fun for any globetrotter. Along with each trip saved on your profile, the profile itself would include showcases and stats pages, inlcuding where you've been, how far you've traveled in total, ways to review and reccomend experiences in certain countries, and a section dedicated to your future travel goals. This app would feature simplified friending and social feeds.
+- *Recipe Book App*
+    - Another niche social app for all the culinary craftsmen looking for an easy way to find new treats and share their own creations. Users will be able to upload recipes to their own profiles, organized however they want into different categories, each entry will have optional video and photo attachments as well as default formatting for sections like ingredients and steps. Each recipe itself will be a post that users can comment on, including their own pictures and videos of success, potentially with the ability to repost on their account. Users will be able to follow creators, see a "for you" feed based on user preferences, or browse different cuisines and searches with sorting options for New, Trending, and Top (All-Time). This will become the hottest place to find exciting new dishes to try out at home, and share your love of food with others.
+    
+
+# Top 3 Idea Evaluation
+- **Gamified Task Manager**
+    - *Mobile: How uniquely mobile is the product experience?*
+        - The ease of access that a smartphone provides to what normally would be a planner someone has to lug around can't be understated, the mobility of this app benefits its usability greatly which gives users less excuses to ignore it. Smartphone specific features such as camera integration to reward success with a post for friends, and push notifications to remind users of their tasks are core features of what can make this app work. 
+    - *Story: How compelling is the story around this app once completed?*
+        - The value of this app is very clear to those who already enjoy checking off their tasks for the day, and also those who need a boost tog et back on track. I have many friends who could use some support in the productivity department, and a rewarding, self-managed interface to get just that would prove invaluable to them. This is a concept that will always be relevant and can be built upon in future versions of the app.
+    - *Market: How large or unique is the market for this app?*
+        - The market for this app is quite large, there are few poeple out there who don't think they could be doing a little more with their day. If our concept works, and poeple stick with the app, it could greatly improve their productivity. This can especially be useful for students, or those tackling deadline-type jobs who have trouble dedicating time to a far out goal. The app can be useful to almost anyone though, as users create their own tasks. Someone could use the app solely to track their exercise and eating routine, or chores around the house that need to get done. 
+    - *Habit: How habit-forming or addictive is this app?*
+        - The user could form a habit of using this app very easily based on the various reward and social features of the app, as well as the push notification integration. A user would open this app once a day to create their tasks and then probably upon each success to post about it, they may also open it to view the posts of others or review their own statistics at multiple points throughout the day. With both social media consumption aspects and game-like task creation + reward, there would be plenty of pulls to open the app.
+    - *Scope: How well-formed is the scope for this app?*
+        - The scope is decently well formed for this app, we have a solid idea of the basic form that will be achievable with our timespan, with multiple optional features depending on how much time is left. Features like these include week planning, more advanced profile displays, tiny games as rewards for task completion, and other social interactions to be made available.Even in its simplest form, this is a compelling app concept.
+- **Quiz Game**
+    - *Mobile: How uniquely mobile is the product experience?*
+        - Smartphone integration for push notifications with daily puzzle reminders and friend invites will push app interaction, and the ability to play this simple game anywhere is a large advantage.
+    - *Story: How compelling is the story around this app once completed?*
+        - People like games, especially games that can make them feel smart, or encourage knowledge. They also like competition and playing games with their friends, so the appeal of this app is pretty clear, the challenge will be doing it better than others
+    - *Market: How large or unique is the market for this app?*
+        - Those looking for on-the-go experiences to get into while on the train or bus, bored students, employees in a dull meeting, these are our people. Many people are looking for their next mobile obsession and having simple multiplayer and rewarding systems could make this that next thing. There is a lot of bored people out there.
+    - *Habit: How habit-forming or addictive is this app?*
+        - The instrinsic fun of playing the game will be complimented by rewarding the user with streaks, medals for certain achievemnts, and friends wanting to play with them will pulll people into this app on a dialy basis. There is a full interaction that the user participates in with the game and the social experience.
+    - *Scope: How well-formed is the scope for this app?*
+        - The scope of this app is fairly well formed, at its core it is a fun quiz game, but with time to develop different modes and advanced stat tracking, there is plenty of room to build on an already solid core product.
+- **Reicipe Book App**
+    - Mobile: How uniquely mobile is the product experience?
+        - This app will integrate the camera and microphone to allow users to upload images and videos attached to their recipes, and support push notifications to alert users of new creations from their favorite chefs. The abilitty to view this app on the go means that you can plan tonight's dinner on the train ride home from work and plan ahead, or even know what you need to grab from the store once you're there.
+    - Story: How compelling is the story around this app once completed?
+        - The story and value of the app are quite clear as its a mobilization of the digitization of recipe books. Recipe blogs already exist in abundance, but turning the idea mobile opens up many options for user interaction and a lot more appeal to social aspects. I know a few home cooks who would enjoy this experience (myself included)
+    - Market: How large or unique is the market for this app?
+        - Over 90% of Americans cook a meal at home at least once a week. This will only increase with rising restaurant and food delivery prices. The market is nearly every American citizen who cooks and has a phone, plus a global audience with some localization features. Almost everyone is looking for new, good food.
+    - Habit: How habit-forming or addictive is this app?
+        - The best part about the pull of this app is that the human body does it for us. When people get hungry, they'll look to this app to find something they can whip up with what they have, or plan ahead for a trip to the store. I could easily see users wanting to try a few new recipes a week, or even 1 a day, and when they're not cooking, they will be bookmarking recipes and looking for promising creators to follow. They willl also be posting their own creations and alterations if they're confident chefs themselves.
+    - Scope: How well-formed is the scope for this app?
+        - The scope for this app is pretty well defined, but there is an infinite well of potential features that pop up the more we think about it. It is simple enough to scope out a minimialist form that will still pull people in, with many avenues to venture down given the proper time. Various posting, reposting, and alteration aspects as well as more prominent social features can make this a standout tool for culinary explorers.
+
+
+# Final Idea - Gamified Task Manager
+Based on the core aspects outlined above, we have chosen to follow through with the Task Manager application. It has the best defined feature set, and seems the most accomplishable while still allowing us to expand on the idea. Second place was the recipe app, but the scope may be a little too large for our time span.
