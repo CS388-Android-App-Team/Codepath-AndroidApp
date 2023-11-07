@@ -13,11 +13,10 @@
 
 ### Description
 
-[Description of your app]
+This application would aim to encourage users to complete as many of their daily goals as possible, while adding a reward and social aspect to maintain consistency. The general theme will be video-games, with related art, sounds, and terminology. Users will be able to set their own tasks and record the completion, and upon completion, post their success with an optional accompanying image. The like button can be an “applaud button”, and comments likely won’t be featured to reduce opportunity for negativity. You will only be able to see others’ posts by both of you adding each other as friends. Statistics like streaks, average completion rates, and other custom trackers can be displayed on the user’s profile for additional incentives to get to work. Push notifications will be used to remind users of their set goals for the day, with potential for random encouraging messages.
 
 ### App Evaluation
 
-[Evaluation of your app across the following attributes]
 - **Category: Productivity and Social**
 - **Mobile: The ease of access that a smartphone provides to what normally would be a planner someone has to lug around can’t be understated, the mobility of this app benefits its usability greatly which gives users less excuses to ignore it. Smartphone specific features such as camera integration to reward success with a post for friends, and push notifications to remind users of their tasks are core features that can make this app successful.**
 - **Story: The value of this app is very clear to those who already enjoy checking off their tasks for the day, and also those who need a boost to get back on track. I have many friends who could use some support in the productivity department, and a rewarding, self-managed interface to get just that would prove invaluable to them. This is a concept that will always be relevant and can be built upon in future versions of the app.**
