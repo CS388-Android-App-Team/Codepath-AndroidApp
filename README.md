@@ -1,2 +1,2 @@
 # CS388-Android-App
-## Gamafied Task manager app
+## Gamified Task manager app
