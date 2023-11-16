@@ -19,6 +19,7 @@ class QuestAdapter(private val questList: MutableList<DummyQuest>) :
     inner class QuestViewHolder(item: View) : RecyclerView.ViewHolder(item) {
         val questName = item.findViewById<TextView>(R.id.QuestNameHome)
         val complete = item.findViewById<CheckBox>(R.id.QuestCompleteHome)
+        val bgd = item.findViewById<View>(R.id.quest_home_background)
     }
 
     inner class EmptyViewHolder(item: View) : RecyclerView.ViewHolder(item) {
@@ -49,6 +50,16 @@ class QuestAdapter(private val questList: MutableList<DummyQuest>) :
             val quest = questList[position]
             holder.questName.text = quest.questName // Assuming questName is a property in your Quest class
             holder.complete.isChecked = quest.isComplete // Assuming isComplete is a property in your Quest class
+            if(quest.isComplete){
+                holder.bgd.setBackgroundResource(R.drawable.rectangle_green)
+            }
+            holder.complete.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    holder.bgd.setBackgroundResource(R.drawable.rectangle_green)
+                } else {
+                    holder.bgd.setBackgroundResource(R.drawable.rectangle_gray)
+                }
+            }
         }
     }
 

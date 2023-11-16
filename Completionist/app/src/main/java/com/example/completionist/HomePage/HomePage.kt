@@ -27,13 +27,13 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         super.onViewCreated(view, savedInstanceState)
 
         val dummyQuestList = mutableListOf<DummyQuest>()
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
+        dummyQuestList.add(DummyQuest("New Quest", false))
+        dummyQuestList.add(DummyQuest("New Quest", false))
+        dummyQuestList.add(DummyQuest("New Quest", false))
+        dummyQuestList.add(DummyQuest("New Quest", false))
+        dummyQuestList.add(DummyQuest("New Quest", true))
+        dummyQuestList.add(DummyQuest("New Quest", false))
+        dummyQuestList.add(DummyQuest("New Quest", false))
 
 
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)

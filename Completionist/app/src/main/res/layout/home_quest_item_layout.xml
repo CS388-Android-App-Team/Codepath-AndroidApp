@@ -8,7 +8,7 @@
     android:layout_marginTop="0dp">
 
     <View
-        android:id="@+id/group_15"
+        android:id="@+id/quest_home_background"
         android:layout_width="194dp"
         android:layout_height="49dp"
         android:layout_alignParentLeft="true"
@@ -25,17 +25,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Quest Name"
-        app:layout_constraintBottom_toBottomOf="@+id/group_15"
+        app:layout_constraintBottom_toBottomOf="@+id/quest_home_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/group_15" />
+        app:layout_constraintTop_toTopOf="@+id/quest_home_background" />
 
     <CheckBox
         android:id="@+id/QuestCompleteHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/group_15"
-        app:layout_constraintEnd_toEndOf="@+id/group_15"
-        app:layout_constraintTop_toTopOf="@+id/group_15" />
+        app:layout_constraintBottom_toBottomOf="@+id/quest_home_background"
+        app:layout_constraintEnd_toEndOf="@+id/quest_home_background"
+        app:layout_constraintTop_toTopOf="@+id/quest_home_background" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
