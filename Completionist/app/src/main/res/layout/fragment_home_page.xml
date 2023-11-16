@@ -4,15 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F8F8"
     tools:context=".HomePage">
 
-<!--    <include layout="./nav_bar.xml"/>-->
+    <!--    <include layout="./nav_bar.xml"/>-->
 
-<!--    <include-->
-<!--        layout="@layout/nav_bar"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content" />-->
+    <!--    <include-->
+    <!--        layout="@layout/nav_bar"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content" />-->
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/michroma"
+        android:text="Completionist"
+        android:textColor="#333333"
+        android:textSize="24sp"
+        android:typeface="serif"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="7dp"
+        android:src="@drawable/logo_with_hex"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_page_quests"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
+        android:scrollbars="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_page_party"
+        android:layout_width="match_parent"
+        android:layout_height="232dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="84dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
     <include
+        android:id="@+id/include2"
         layout="@layout/nav_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,12 +75,31 @@
         tools:visibility="visible" />
 
     <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/michroma"
+        android:text="Current Quests"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/home_page_quests"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="212dp"
-        android:text="Home Page"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="43dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/michroma"
+        android:text="Party Members"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/home_page_party"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/home_page_quests" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
