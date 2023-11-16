@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-class HomePage : Fragment(R.layout.fragment_home_page) {
+class ProfilePage : Fragment(R.layout.fragment_profile_page) {
 
     private var listener: OnNavigationItemClickListener? = null
 

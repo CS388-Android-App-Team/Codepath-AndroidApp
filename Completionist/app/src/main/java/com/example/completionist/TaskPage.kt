@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-class HomePage : Fragment(R.layout.fragment_home_page) {
+class TaskPage : Fragment(R.layout.fragment_task_page) {
 
     private var listener: OnNavigationItemClickListener? = null
 
@@ -18,6 +18,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
             throw RuntimeException("$context must implement OnNavigationItemClickListener")
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -34,6 +35,5 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         profilePageNav.setOnClickListener{
             listener?.onProfileClicked()
         }
-
     }
 }
