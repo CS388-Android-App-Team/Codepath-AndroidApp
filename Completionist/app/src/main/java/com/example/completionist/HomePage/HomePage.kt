@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.OnNavigationItemClickListener
@@ -25,12 +26,24 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         super.onViewCreated(view, savedInstanceState)
 
         val dummyQuestList = mutableListOf<DummyQuest>()
-//        dummyQuestList.add(DummyQuest("New QUest", false))
+        dummyQuestList.add(DummyQuest("New QUest", false))
+        dummyQuestList.add(DummyQuest("New QUest", false))
+        dummyQuestList.add(DummyQuest("New QUest", false))
+        dummyQuestList.add(DummyQuest("New QUest", false))
+        dummyQuestList.add(DummyQuest("New QUest", false))
+        dummyQuestList.add(DummyQuest("New QUest", false))
+        dummyQuestList.add(DummyQuest("New QUest", false))
+
 
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)
         val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
 
-        val layoutManagerQuest = LinearLayoutManager(requireContext())
+        val layoutManagerQuest =  GridLayoutManager(requireContext(), 2)
+//        layoutManagerQuest.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+//            override fun getSpanSize(position: Int): Int {
+//                return if (position % 2 == 0) 2 else 1
+//            }
+//        }
         val layoutManagerParty = LinearLayoutManager(requireContext())
 
         val questAdapter = QuestAdapter(dummyQuestList)
