@@ -35,6 +35,15 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         dummyQuestList.add(DummyQuest("New Quest", false))
         dummyQuestList.add(DummyQuest("New Quest", false))
 
+        val partyMemberList = mutableListOf<PartyMemberDummy>()
+        partyMemberList.add(PartyMemberDummy("John Doe", 15, 1))
+        partyMemberList.add(PartyMemberDummy("John Doe", 25, 20))
+        partyMemberList.add(PartyMemberDummy("John Doe", 1, 2))
+        partyMemberList.add(PartyMemberDummy("John Doe", 0, 0))
+        partyMemberList.add(PartyMemberDummy("John Doe", 150, 1))
+        partyMemberList.add(PartyMemberDummy("John Doe", 125, 4))
+
+
 
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)
         val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
@@ -42,19 +51,16 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         val layoutManagerQuest =  GridLayoutManager(requireContext(),
             2, GridLayoutManager.HORIZONTAL, false
         )
-//        layoutManagerQuest.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-//            override fun getSpanSize(position: Int): Int {
-//                return if (position % 2 == 0) 2 else 1
-//            }
-//        }
-        val layoutManagerParty = LinearLayoutManager(requireContext())
+        val layoutManagerParty = GridLayoutManager(requireContext(), 1)
 
         val questAdapter = QuestAdapter(dummyQuestList)
-//        val partyMemberAdapter = PartyMemberAdapter(partyMemberList)
+        val partyMemberAdapter = PartyAdapter(partyMemberList)
 
         questRecyclerView.layoutManager = layoutManagerQuest
         questRecyclerView.adapter = questAdapter
-//        partyRecyclerView.adapter = partyMemberAdapter
+
+        partyRecyclerView.layoutManager = layoutManagerParty
+        partyRecyclerView.adapter = partyMemberAdapter
 
 
         val homePageNav = view.findViewById<View>(R.id.home_nav)

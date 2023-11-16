@@ -27,17 +27,13 @@ class QuestAdapter(private val questList: MutableList<DummyQuest>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        Log.v("HomePage", "ViewHolder being created with viewType $viewType")
-
         return when (viewType) {
             VIEW_TYPE_QUEST -> {
-                Log.v("HomePage", "Item View being inflated")
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.home_quest_item_layout, parent, false)
                 QuestViewHolder(view)
             }
             else -> {
-                Log.v("HomePage", "Empty View being inflated")
                 val emptyView = LayoutInflater.from(parent.context)
                     .inflate(R.layout.home_quest_empty_view_layout, parent, false)
                 EmptyViewHolder(emptyView)
