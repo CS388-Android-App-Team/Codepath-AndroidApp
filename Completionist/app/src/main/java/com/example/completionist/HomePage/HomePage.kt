@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.OnNavigationItemClickListener
 import com.example.completionist.R
+import kotlin.math.ceil
 
 class HomePage : Fragment(R.layout.fragment_home_page) {
 
@@ -38,7 +39,9 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)
         val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
 
-        val layoutManagerQuest =  GridLayoutManager(requireContext(), 2)
+        val layoutManagerQuest =  GridLayoutManager(requireContext(),
+            2, GridLayoutManager.HORIZONTAL, false
+        )
 //        layoutManagerQuest.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
 //            override fun getSpanSize(position: Int): Int {
 //                return if (position % 2 == 0) 2 else 1
