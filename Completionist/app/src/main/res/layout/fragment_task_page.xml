@@ -9,6 +9,20 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="34dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="30dp"
+        android:rotationY="180"
+        android:src="@drawable/date_change_arrow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <ImageView
         android:id="@+id/addNewQuestButtonHome2"
         android:layout_width="26dp"
         android:layout_height="29dp"
@@ -75,10 +89,30 @@
         android:id="@+id/textView6"
         android:layout_width="214dp"
         android:layout_height="42dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="52dp"
         android:text="November 1st, 2023"
         android:textAlignment="center"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="98dp"
-        tools:layout_editor_absoluteY="141dp" />
+        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="34dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="35dp"
+        android:src="@drawable/date_change_arrow"
+        app:layout_constraintEnd_toStartOf="@+id/textView6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo2" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="409dp"
+        android:layout_height="404dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="209dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
