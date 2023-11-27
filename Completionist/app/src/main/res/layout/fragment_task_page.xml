@@ -4,39 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".TaskPage">
+    tools:context=".TaskPage.TaskPage">
 
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/change_date_arrow_forward"
         android:layout_width="34dp"
         android:layout_height="42dp"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="35dp"
         android:layout_marginTop="52dp"
         android:layout_marginEnd="30dp"
         android:rotationY="180"
         android:src="@drawable/date_change_arrow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintStart_toEndOf="@+id/selected_date_text"
+        app:layout_constraintTop_toBottomOf="@+id/accept_new_quest_text" />
 
     <ImageView
-        android:id="@+id/addNewQuestButtonHome2"
+        android:id="@+id/add_new_quest_button_task"
         android:layout_width="26dp"
         android:layout_height="29dp"
-        android:layout_marginTop="82dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="13dp"
-        android:layout_marginBottom="503dp"
-        app:layout_constraintBottom_toTopOf="@+id/include"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/change_date_arrow_forward"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/accept_new_quest_text"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/add_button" />
 
     <TextView
-        android:id="@+id/app_name2"
+        android:id="@+id/quest_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="96dp"
@@ -71,7 +72,7 @@
         tools:visibility="visible" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/accept_new_quest_text"
         android:layout_width="189dp"
         android:layout_height="32dp"
         android:layout_marginStart="183dp"
@@ -83,36 +84,45 @@
         app:layout_constraintBottom_toTopOf="@+id/include"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_name2" />
+        app:layout_constraintTop_toBottomOf="@id/quest_list" />
 
     <TextView
-        android:id="@+id/textView6"
-        android:layout_width="214dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="52dp"
-        android:text="November 1st, 2023"
+        android:id="@+id/selected_date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="50dp"
+        android:text="11/27/2023"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintEnd_toStartOf="@+id/change_date_arrow_forward"
+        app:layout_constraintStart_toEndOf="@+id/change_date_arrow_backward"
+        app:layout_constraintTop_toBottomOf="@+id/accept_new_quest_text" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/change_date_arrow_backward"
         android:layout_width="34dp"
         android:layout_height="42dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="84dp"
         android:layout_marginEnd="35dp"
         android:src="@drawable/date_change_arrow"
-        app:layout_constraintEnd_toStartOf="@+id/textView6"
+        app:layout_constraintEnd_toStartOf="@+id/selected_date_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo2" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/quests_recycler_view"
         android:layout_width="409dp"
         android:layout_height="404dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="209dp" />
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/include"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_date_arrow_forward" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

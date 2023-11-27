@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.R
 
-class QuestAdapter(private val questList: MutableList<DummyQuest>) :
+class DummyQuestAdapter(private val questList: MutableList<DummyQuest>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         private val VIEW_TYPE_QUEST = 1
@@ -17,8 +17,8 @@ class QuestAdapter(private val questList: MutableList<DummyQuest>) :
 
 
     inner class QuestViewHolder(item: View) : RecyclerView.ViewHolder(item) {
-        val questName = item.findViewById<TextView>(R.id.QuestNameHome)
-        val complete = item.findViewById<CheckBox>(R.id.QuestCompleteHome)
+        val questName = item.findViewById<TextView>(R.id.quest_name)
+        val complete = item.findViewById<CheckBox>(R.id.quest_complete_task)
     }
 
     inner class EmptyViewHolder(item: View) : RecyclerView.ViewHolder(item) {
@@ -47,7 +47,7 @@ class QuestAdapter(private val questList: MutableList<DummyQuest>) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is QuestViewHolder) {
             val quest = questList[position]
-            holder.questName.text = quest.questName // Assuming questName is a property in your Quest class
+            holder.questName?.text = quest.questName // Assuming questName is a property in your Quest class
             holder.complete.isChecked = quest.isComplete // Assuming isComplete is a property in your Quest class
         }
     }
