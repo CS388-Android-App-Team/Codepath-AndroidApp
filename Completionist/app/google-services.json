@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "459460875608",
+    "project_id": "completionist-a3ee4",
+    "storage_bucket": "completionist-a3ee4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459460875608:android:d3ee1bb58710e78dbf812d",
+        "android_client_info": {
+          "package_name": "com.example.completionist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmc05e6MLDOaUGI2Zdae248AuvA_c9mng"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
