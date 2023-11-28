@@ -16,10 +16,12 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, HomePage())
             .commit()
-
+    /*  testing basic connection to realtime db
         val database = Firebase.database
         val myRef = database.getReference("message")
         myRef.setValue("Hello, World!")
+
+     */
     }
     override fun onHomeClicked() {
         Log.v("NavBar", "Home Clicked")
