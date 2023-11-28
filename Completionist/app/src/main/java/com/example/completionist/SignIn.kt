@@ -18,7 +18,8 @@ class SignIn : Fragment(R.layout.fragment_signin_page) {
     private var listener: OnNavigationItemClickListener? = null
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
-    private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
+   // private lateinit var signUpRequest: BeginSignInRequest
+    private val REQONETAP = 2  // Can be any integer unique to the Activity
     private var showOneTapUI = true
 
 
@@ -33,19 +34,24 @@ class SignIn : Fragment(R.layout.fragment_signin_page) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val signOutButton = view.findViewById<View>(R.id.signOutButton)
+        val homePageNav = view.findViewById<View>(R.id.home_nav)
+        val taskPageNav = view.findViewById<View>(R.id.task_nav)
+        val profilePageNav = view.findViewById<View>(R.id.profile_nav)
 
         oneTapClient = Identity.getSignInClient(requireActivity())
         signInRequest = BeginSignInRequest.builder()
             .setPasswordRequestOptions(BeginSignInRequest.PasswordRequestOptions.builder()
                 .setSupported(true)
                 .build())
+
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
                     // Your server's client ID, not your Android client ID.
                     .setServerClientId(getString(R.string.your_web_client_id))
                     // Only show accounts previously used to sign in.
-                    .setFilterByAuthorizedAccounts(true)
+                    .setFilterByAuthorizedAccounts(false)
                     .build())
             // Automatically sign in when exactly one credential is retrieved.
             .setAutoSelectEnabled(true)
@@ -56,17 +62,29 @@ class SignIn : Fragment(R.layout.fragment_signin_page) {
             .addOnSuccessListener(requireActivity()) { result ->
                 try {
                     startIntentSenderForResult(
-                        result.pendingIntent.intentSender, REQ_ONE_TAP,
+                        result.pendingIntent.intentSender, REQONETAP,
                         null, 0, 0, 0, null)
                 } catch (e: IntentSender.SendIntentException) {
                     Log.e(TAG, "Couldn't start One Tap UI: ${e.localizedMessage}")
                 }
             }
             .addOnFailureListener(requireActivity()) { e ->
-                // No saved credentials found. Launch the One Tap sign-up flow, or
-                // do nothing and continue presenting the signed-out UI.
                 Log.d(TAG, e.localizedMessage)
             }
+
+        signOutButton.setOnClickListener{
+            oneTapClient.signOut()
+            signOutButton.isEnabled = false
+        }
+        homePageNav.setOnClickListener{
+            listener?.onHomeClicked()
+        }
+        taskPageNav.setOnClickListener{
+            listener?.onTaskClicked()
+        }
+        profilePageNav.setOnClickListener{
+            listener?.onProfileClicked()
+        }
 
     }
 
@@ -74,7 +92,7 @@ class SignIn : Fragment(R.layout.fragment_signin_page) {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-            REQ_ONE_TAP -> {
+            REQONETAP -> {
                 try {
                     val credential = oneTapClient.getSignInCredentialFromIntent(data)
                     val idToken = credential.googleIdToken
@@ -119,5 +137,9 @@ class SignIn : Fragment(R.layout.fragment_signin_page) {
                 }
             }
         }
+
+
     }
+
+
 }
