@@ -21,6 +21,7 @@ class SignIn : Fragment(R.layout.fragment_signin_page) {
    // private lateinit var signUpRequest: BeginSignInRequest
     private val REQONETAP = 2  // Can be any integer unique to the Activity
     private var showOneTapUI = true
+    private var isSignedIn = false
 
 
     override fun onAttach(context: Context) {
@@ -38,6 +39,8 @@ class SignIn : Fragment(R.layout.fragment_signin_page) {
         val homePageNav = view.findViewById<View>(R.id.home_nav)
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
+
+        signOutButton.isEnabled = isSignedIn
 
         oneTapClient = Identity.getSignInClient(requireActivity())
         signInRequest = BeginSignInRequest.builder()
@@ -74,6 +77,7 @@ class SignIn : Fragment(R.layout.fragment_signin_page) {
 
         signOutButton.setOnClickListener{
             oneTapClient.signOut()
+            isSignedIn=false
             signOutButton.isEnabled = false
         }
         homePageNav.setOnClickListener{
@@ -103,6 +107,7 @@ class SignIn : Fragment(R.layout.fragment_signin_page) {
                             // Got an ID token from Google. Use it to authenticate
                             // with your backend.
                             Log.d(TAG, "Got ID token.")
+                            isSignedIn = true
                         }
                         password != null -> {
                             // Got a saved username and password. Use them to authenticate
