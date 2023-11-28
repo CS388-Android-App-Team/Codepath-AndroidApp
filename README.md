@@ -159,9 +159,11 @@ from the original requirements
 
 [Add video/gif of your current application that shows build progress]
 Sign in
+<br>
 <img src="https://github.com/CS388-Android-App-Team/Codepath-AndroidApp/blob/main/CompletionistPrototype1.gif" width=400>
 <br>
 Tasks
+<br>
 <img src="INSERT URL HERE" width=400>
 
 ## App Demo Video
