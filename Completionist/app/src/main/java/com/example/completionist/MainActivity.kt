@@ -45,6 +45,16 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
             Log.v("NavBar", "Already Profile")
         }
     }
+    override fun onSignInClicked() {
+        Log.v("NavBar", "Sign In Clicked")
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+        // Check if the current fragment is not SignIn
+        if (currentFragment !is SignIn) {
+            switchFragment(SignIn())
+        }else{
+            Log.v("SignInButton", "Already Sign In")
+        }
+    }
     private fun switchFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
