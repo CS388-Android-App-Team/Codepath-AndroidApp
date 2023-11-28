@@ -164,7 +164,7 @@ Sign in
 <br>
 Tasks
 <br>
-<img src="INSERT URL HERE" width=400>
+<img src="https://github.com/CS388-Android-App-Team/Codepath-AndroidApp/blob/main/task_page_demo.gif" width=400>
 
 ## App Demo Video
 
