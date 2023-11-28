@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.completionist.HomePage.HomePage
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +16,10 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, HomePage())
             .commit()
+
+        val database = Firebase.database
+        val myRef = database.getReference("message")
+        myRef.setValue("Hello, World!")
     }
     override fun onHomeClicked() {
         Log.v("NavBar", "Home Clicked")
