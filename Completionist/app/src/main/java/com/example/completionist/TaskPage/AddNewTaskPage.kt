@@ -49,8 +49,7 @@ class AddNewTaskPage : AppCompatActivity() {
         }
 
         declineButton.setOnClickListener {
-            val intent = Intent(this, TaskPage::class.java)
-            startActivity(intent)
+            finish()
         }
 
     }
