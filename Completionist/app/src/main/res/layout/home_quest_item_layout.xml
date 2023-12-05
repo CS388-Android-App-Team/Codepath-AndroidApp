@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/QuestNameHome"
+        android:id="@+id/quest_name_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="@+id/group_15" />
 
     <CheckBox
-        android:id="@+id/QuestCompleteHome"
+        android:id="@+id/quest_complete_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/group_15"

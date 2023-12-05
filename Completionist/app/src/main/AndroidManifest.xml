@@ -13,6 +13,10 @@
         android:theme="@style/Theme.Completionist"
         tools:targetApi="31">
         <activity
+            android:name=".TaskPage.AddNewTaskPage"
+            android:label="Add New Task Page">
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

@@ -46,7 +46,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 //        }
         val layoutManagerParty = LinearLayoutManager(requireContext())
 
-        val questAdapter = QuestAdapter(dummyQuestList)
+        val questAdapter = DummyQuestAdapter(dummyQuestList)
 //        val partyMemberAdapter = PartyMemberAdapter(partyMemberList)
 
         questRecyclerView.layoutManager = layoutManagerQuest

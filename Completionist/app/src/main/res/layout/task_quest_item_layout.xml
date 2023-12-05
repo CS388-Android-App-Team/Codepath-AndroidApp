@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <View
+        android:id="@+id/group_15"
+        android:layout_width="194dp"
+        android:layout_height="49dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/rectangle_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/quest_name_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="Quest Name"
+        app:layout_constraintBottom_toBottomOf="@+id/group_15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/group_15"
+        app:layout_constraintVertical_bias="0.166" />
+
+    <CheckBox
+        android:id="@+id/quest_complete_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/group_15"
+        app:layout_constraintEnd_toEndOf="@+id/group_15"
+        app:layout_constraintTop_toTopOf="@+id/group_15" />
+
+    <TextView
+        android:id="@+id/quest_start_to_end_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="11/27/2023 - 11/27/2023"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/group_15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/group_15"
+        app:layout_constraintVertical_bias="0.666" />
+
+    <ImageView
+        android:id="@+id/popup_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/group_15"
+        app:layout_constraintEnd_toStartOf="@+id/quest_name_task"
+        app:layout_constraintTop_toTopOf="@+id/group_15"
+        app:srcCompat="@drawable/three_dots_for_popup" />
+
+    <TextView
+        android:id="@+id/quest_points_amount"
+        android:layout_width="24dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="5dp"
+        android:text="+10"
+        app:layout_constraintEnd_toStartOf="@+id/quest_complete_task"
+        app:layout_constraintStart_toEndOf="@+id/quest_name_task"
+        app:layout_constraintTop_toTopOf="@+id/group_15" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
