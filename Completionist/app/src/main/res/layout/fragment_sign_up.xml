@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".signinandup.SignUp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#BFBEBE">
+
+    <ImageView
+        android:id="@+id/backArrowSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/back_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logoSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_with_hex" />
+
+    <ImageView
+        android:id="@+id/SignUpPoly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.118"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoSignUp"
+        app:srcCompat="@drawable/polygon_2" />
+
+    <TextView
+        android:id="@+id/titleSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:fontFamily="@font/michroma"
+        android:text="Sign Up"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/SignUpPoly"
+        app:layout_constraintStart_toStartOf="@+id/SignUpPoly"
+        app:layout_constraintTop_toTopOf="@+id/SignUpPoly" />
+
+    <TextView
+        android:id="@+id/FirstNameSUlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/michroma"
+        android:text="First Name"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/FirstNameSU"
+        app:layout_constraintStart_toStartOf="@+id/FirstNameSU" />
+
+    <EditText
+        android:id="@+id/FirstNameSU"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/shape_with_text"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/LastNameSU"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/LastNameSUlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/michroma"
+        android:text="Last Name"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/LastNameSU"
+        app:layout_constraintStart_toStartOf="@+id/LastNameSU" />
+
+    <EditText
+        android:id="@+id/LastNameSU"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/shape_with_text"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/EmailSU"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/EmailSUlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/michroma"
+        android:text="Email"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/EmailSU"
+        app:layout_constraintStart_toStartOf="@+id/EmailSU" />
+
+    <EditText
+        android:id="@+id/EmailSU"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/shape_with_text"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/PasswordSU"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/PasswordSULabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/michroma"
+        android:text="Password"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/PasswordSU"
+        app:layout_constraintStart_toStartOf="@+id/PasswordSU" />
+
+    <EditText
+        android:id="@+id/PasswordSU"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/shape_with_text"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/PasswordCSU"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/PasswordCSULabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/michroma"
+        android:text="Confirm Password"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/PasswordCSU"
+        app:layout_constraintStart_toStartOf="@+id/PasswordCSU" />
+
+    <EditText
+        android:id="@+id/PasswordCSU"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/shape_with_text"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/SingUpButtonSU"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/SingUpButtonSU"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#7BC687"
+        android:fontFamily="@font/michroma"
+        android:text="Sign In"
+        android:textColor="#222222"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/PasswordCSU"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/PasswordCSU" />
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
