@@ -173,7 +173,7 @@
         android:layout_marginBottom="40dp"
         android:backgroundTint="#7BC687"
         android:fontFamily="@font/michroma"
-        android:text="Sign In"
+        android:text="Sign Up"
         android:textColor="#222222"
         android:textSize="16sp"
         android:textStyle="bold"

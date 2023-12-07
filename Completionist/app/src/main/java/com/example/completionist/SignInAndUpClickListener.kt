@@ -5,5 +5,7 @@ interface SignInAndUpClickListener {
     fun onSignUpClick()
     fun onForgotPasswordClick()
     fun onBackClick()
+    fun onSignInClick()
+    fun onSendLinkClick()
 
 }
