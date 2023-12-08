@@ -28,10 +28,10 @@
         tools:visibility="visible" />
 
     <Button
-        android:id="@+id/signInButton"
+        android:id="@+id/signOutButtonProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SIGN IN"
+        android:text="SIGN OUT"
         app:layout_constraintBottom_toTopOf="@+id/include"
         app:layout_constraintStart_toStartOf="parent" />
 

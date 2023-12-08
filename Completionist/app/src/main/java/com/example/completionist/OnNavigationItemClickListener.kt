@@ -4,5 +4,5 @@ interface OnNavigationItemClickListener {
     fun onHomeClicked()
     fun onTaskClicked()
     fun onProfileClicked()
-    fun onSignInClicked()
+    fun onSignOutClicked()
 }
