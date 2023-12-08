@@ -35,7 +35,7 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
             listener?.onProfileClicked()
         }
         signOutButton.setOnClickListener{
-            listener?.onSignInClicked()
+            listener?.onSignOutClicked()
         }
 
     }

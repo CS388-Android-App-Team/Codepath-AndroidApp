@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
             Log.v("NavBar", "Already Profile")
         }
     }
-    override fun onSignInClicked() {
+    override fun onSignOutClicked() {
         Log.v("NavBar", "Sign In Clicked")
         firebaseAuth.signOut()
         val intent = Intent(this, SplashScreen::class.java)
