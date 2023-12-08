@@ -2,10 +2,10 @@ package com.example.completionist
 
 interface SignInAndUpClickListener {
     fun onRegisterClick()
-    fun onSignUpClick()
+    fun onSignUpClick(fName: String, lName: String, email: String, password: String, passwordConfirm: String)
     fun onForgotPasswordClick()
     fun onBackClick()
-    fun onSignInClick()
-    fun onSendLinkClick()
+    fun onSignInClick(email: String, password: String)
+    fun onSendLinkClick(email: String)
 
 }

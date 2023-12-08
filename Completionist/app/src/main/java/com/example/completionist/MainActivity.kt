@@ -1,5 +1,6 @@
 package com.example.completionist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,8 +9,11 @@ import com.example.completionist.HomePage.HomePage
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 import com.example.completionist.TaskPage.TaskPage
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var recievedIntent: Intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -23,6 +27,11 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         myRef.setValue("Hello, World!")
 
      */
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        recievedIntent = intent
+
+        Log.v("MainActivity UID", "${firebaseAuth.currentUser?.uid}, recieved value: ${recievedIntent.getStringExtra("USER_UID")}" )
     }
     override fun onHomeClicked() {
         Log.v("NavBar", "Home Clicked")
@@ -56,6 +65,9 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
     }
     override fun onSignInClicked() {
         Log.v("NavBar", "Sign In Clicked")
+        firebaseAuth.signOut()
+        val intent = Intent(this, SplashScreen::class.java)
+        startActivity(intent)
 //        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
 //        // Check if the current fragment is not SignIn
 //        if (currentFragment !is SignIn) {

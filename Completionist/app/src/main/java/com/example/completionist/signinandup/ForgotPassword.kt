@@ -32,7 +32,7 @@ class ForgotPassword : Fragment(R.layout.fragment_forgot_password) {
         val sendLinkButton = view.findViewById<Button>(R.id.SendLinkFP)
         val backButton = view.findViewById<ImageView>(R.id.backArrowForgotPassword)
 
-        sendLinkButton.setOnClickListener { listener?.onSendLinkClick() }
+        sendLinkButton.setOnClickListener { listener?.onSendLinkClick(emailEditBox.text.toString()) }
         backButton.setOnClickListener{listener?.onBackClick()}
 
     }

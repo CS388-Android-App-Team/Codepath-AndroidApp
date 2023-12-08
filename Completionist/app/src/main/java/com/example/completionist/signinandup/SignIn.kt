@@ -35,14 +35,10 @@ class SignIn : Fragment(R.layout.fragment_sign_in) {
         val signUpLink = view.findViewById<TextView>(R.id.signuplink_signin)
 
         signInButton.setOnClickListener {
-            listener?.onSignInClick()
+            listener?.onSignInClick(emailEditBox.text.toString(), passwordEditBox.text.toString())
         }
-        forgotPasswordLink.setOnClickListener {
-            listener?.onForgotPasswordClick()
-        }
-        signUpLink.setOnClickListener {
-            listener?.onRegisterClick()
-        }
+        forgotPasswordLink.setOnClickListener { listener?.onForgotPasswordClick() }
+        signUpLink.setOnClickListener { listener?.onRegisterClick() }
     }
 
 }

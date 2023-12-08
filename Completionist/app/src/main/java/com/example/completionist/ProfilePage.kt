@@ -3,9 +3,8 @@ package com.example.completionist
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+
 class ProfilePage : Fragment(R.layout.fragment_profile_page) {
 
     private var listener: OnNavigationItemClickListener? = null
@@ -24,7 +23,7 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         val homePageNav = view.findViewById<View>(R.id.home_nav)
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
-        val signInNav = view.findViewById<View>(R.id.signInButton)
+        val signOutButton = view.findViewById<View>(R.id.signOutButtonProfile)
 
         homePageNav.setOnClickListener{
             listener?.onHomeClicked()
@@ -35,7 +34,7 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         profilePageNav.setOnClickListener{
             listener?.onProfileClicked()
         }
-        signInNav.setOnClickListener{
+        signOutButton.setOnClickListener{
             listener?.onSignInClicked()
         }
 

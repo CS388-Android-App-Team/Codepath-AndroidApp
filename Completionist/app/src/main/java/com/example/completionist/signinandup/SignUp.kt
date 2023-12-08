@@ -37,10 +37,13 @@ class SignUp : Fragment(R.layout.fragment_sign_up) {
         val backButton = view.findViewById<ImageView>(R.id.backArrowSignUp)
 
         signUpButton.setOnClickListener {
-            listener?.onSignUpClick()
+            listener?.onSignUpClick(
+                firstNameEditBox.text.toString(),
+                lastNameEditBox.text.toString(),
+                emailEditBox.text.toString(),
+                passwordEditBox.text.toString(),
+                passwordCEditBox.text.toString())
         }
-        backButton.setOnClickListener{
-            listener?.onBackClick()
-        }
+        backButton.setOnClickListener{ listener?.onBackClick() }
     }
 }
