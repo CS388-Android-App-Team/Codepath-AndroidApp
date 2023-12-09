@@ -150,8 +150,6 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
     }
     fun writeNewUser(currUser: FirebaseUser, newEmail: String) {
         val user = User(currUser.uid, newEmail, newEmail)
-       // val noFriendsYet = Friend("iAmAlone", false)
-        // if user exists don't do it
         usersRef.child(currUser.uid).setValue(user)
         usersRef.child(currUser.uid).child("friends").child("testUID").setValue(false)
     }
