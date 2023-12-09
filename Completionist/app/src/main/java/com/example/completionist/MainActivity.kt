@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var recievedIntent: Intent
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,12 +22,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, HomePage())
             .commit()
-    /*  testing basic connection to realtime db
-        val database = Firebase.database
-        val myRef = database.getReference("message")
-        myRef.setValue("Hello, World!")
 
-     */
 
         firebaseAuth = FirebaseAuth.getInstance()
         recievedIntent = intent

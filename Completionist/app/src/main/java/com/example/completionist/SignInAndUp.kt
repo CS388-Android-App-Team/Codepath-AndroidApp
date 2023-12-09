@@ -10,11 +10,18 @@ import com.example.completionist.HomePage.HomePage
 import com.example.completionist.signinandup.ForgotPassword
 import com.example.completionist.signinandup.SignIn
 import com.example.completionist.signinandup.SignUp
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 
 class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
 
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
+    private lateinit var usersRef: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in_and_up)
@@ -25,6 +32,8 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
 
         firebaseAuth = FirebaseAuth.getInstance()
         Log.v("firebase isntance sign in", "${firebaseAuth.currentUser?.uid}")
+        database = Firebase.database
+        usersRef = database.getReference("users")
     }
 
     override fun onSignInClick(email: String, password: String) {
@@ -71,6 +80,9 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
                         if (it.isSuccessful){
                             val currentUser = firebaseAuth.currentUser
                             val userId = currentUser?.uid ?: ""
+                            if (currentUser != null) {
+                                writeNewUser(currentUser, email)
+                            }
                             Log.v("Sign In and Up", "$currentUser, $userId")
                             switchFragment(SignIn())
                         }else{
@@ -135,5 +147,11 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
     fun isValidPassword(password: String): Boolean {
         val passwordPattern = Regex("^(?=.*[A-Z])(?=.*[!@#\$%^&*()-+])(?=\\S+\$).{8,}\$")
         return passwordPattern.matches(password)
+    }
+    fun writeNewUser(currUser: FirebaseUser, newEmail: String) {
+        val user = User(currUser.uid, newEmail, newEmail)
+        // if user exists don't do it
+        usersRef.child(currUser.uid).setValue(user)
+        usersRef.child(currUser.uid).child("friends").setValue("none")
     }
 }
