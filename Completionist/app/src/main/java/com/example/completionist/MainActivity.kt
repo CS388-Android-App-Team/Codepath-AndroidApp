@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.completionist.HomePage.HomePage
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
+import com.example.completionist.ProfiePage.ProfilePage
+import com.example.completionist.ProfiePage.SettingsPage
 import com.example.completionist.TaskPage.TaskPage
 import com.google.firebase.auth.FirebaseAuth
 
@@ -72,6 +72,18 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
 //            Log.v("SignInButton", "Already Sign In")
 //        }
     }
+
+    override fun onSettingsClicked() {
+        Log.v("Nav", "Settings Clicked")
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+        // Check if the current fragment is not ProfilePage
+        if (currentFragment !is SettingsPage) {
+            switchFragment(SettingsPage())
+        }else{
+            Log.v("NavBar", "Already Settings")
+        }
+    }
+
     private fun switchFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
