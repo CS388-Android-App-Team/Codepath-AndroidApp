@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.completionist.HomePage.HomePage
 import com.example.completionist.signinandup.ForgotPassword
 import com.example.completionist.signinandup.SignIn
 import com.example.completionist.signinandup.SignUp
@@ -22,10 +21,12 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var usersRef: DatabaseReference
+
+    public lateinit var currentUserData: User
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in_and_up)
-
         supportFragmentManager.beginTransaction()
             .replace(R.id.signFragmentContainer, SignIn())
             .commit()
@@ -153,8 +154,11 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
         return passwordPattern.matches(password)
     }
     fun writeNewUser(currUser: FirebaseUser, newEmail: String) {
-        val user = User(currUser.uid, newEmail, newEmail)
+        val user = User(currUser.uid, newEmail, newEmail, 0, 0, 0, 0, 0)
         usersRef.child(currUser.uid).setValue(user)
         usersRef.child(currUser.uid).child("friends").child("testUID").setValue(false)
     }
+
+
+
 }

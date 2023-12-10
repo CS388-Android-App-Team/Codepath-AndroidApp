@@ -3,16 +3,30 @@ package com.example.completionist.ProfiePage
 import android.content.Context
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Im
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.completionist.OnNavigationItemClickListener
 import com.example.completionist.R
+import com.example.completionist.User
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
+import com.google.firebase.database.getValue
 
 class ProfilePage : Fragment(R.layout.fragment_profile_page) {
 
     private var listener: OnNavigationItemClickListener? = null
+    private lateinit var database: FirebaseDatabase
+    private lateinit var usersRef: DatabaseReference
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var currUser: FirebaseUser
+    private lateinit var currUserData: User
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -24,6 +38,11 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        database = Firebase.database
+        usersRef = database.getReference("users")
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAuth.currentUser?.let { us ->
+            currUser = us }
 
         val homePageNav = view.findViewById<View>(R.id.home_nav)
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
@@ -35,7 +54,20 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         val userPoints = view.findViewById<TextView>(R.id.points_profilepage)
         val userPartySize = view.findViewById<TextView>(R.id.partysize_profilepage)
 
+
         val settingsIcon = view.findViewById<ImageView>(R.id.settingsicon_profilepage)
+
+
+        usersRef.child(currUser.uid).get().addOnSuccessListener {
+            currUserData = User(currUser.uid, it.child("username").value.toString(), it.child("email").value.toString(), it.child("level").value.toString().toInt(), it.child("xp").value.toString().toInt(), it.child("streak").value.toString().toInt(), it.child("consistency").value.toString().toInt(), it.child("friendCount").value.toString().toInt())
+            userName.text = currUserData.username
+            userPoints.text = currUserData.xp.toString() + "/100"
+            userPartySize.text = currUserData.friendCount.toString()
+
+            Log.i("firebase", "Got username value ${it.value}")
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting data", it)
+        }
 
         homePageNav.setOnClickListener{
             listener?.onHomeClicked()
@@ -52,4 +84,18 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         settingsIcon.setOnClickListener(){listener?.onSettingsClicked()}
 
     }
+/*
+    fun loadUser( currUser: FirebaseUser): User {
+          var currentUserData: User
+          currentUserData = User("not2", "loaded", "yet2")
+        usersRef.child(currUser.uid).child("username").get().addOnSuccessListener {
+             currentUserData = User(currUser.uid, it.value.toString(), currUser.email)
+            Log.i("firebase", "Got username value ${it.value}")
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting data", it)
+        }
+        return currentUserData
+    }
+
+ */
 }

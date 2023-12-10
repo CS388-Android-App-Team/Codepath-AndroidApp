@@ -2,11 +2,13 @@ package com.example.completionist.HomePage
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.completionist.MainActivity
 import com.example.completionist.OnNavigationItemClickListener
 import com.example.completionist.R
 
@@ -24,7 +26,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+       // val activity: MainActivity? = activity as MainActivity?
         val dummyQuestList = mutableListOf<DummyQuest>()
         dummyQuestList.add(DummyQuest("New QUest", false))
         dummyQuestList.add(DummyQuest("New QUest", false))
@@ -37,6 +39,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)
         val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
+        val usernameDisplay = view.findViewById<TextView>(R.id.username)
 
         val layoutManagerQuest =  GridLayoutManager(requireContext(), 2)
 //        layoutManagerQuest.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -51,6 +54,8 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 
         questRecyclerView.layoutManager = layoutManagerQuest
         questRecyclerView.adapter = questAdapter
+
+        //usernameDisplay.text = currUserData.username
 //        partyRecyclerView.adapter = partyMemberAdapter
 
 
