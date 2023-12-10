@@ -1,9 +1,11 @@
-package com.example.completionist
+package com.example.completionist.ProfiePage
 
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import com.example.completionist.OnNavigationItemClickListener
+import com.example.completionist.R
 
 class ProfilePage : Fragment(R.layout.fragment_profile_page) {
 
