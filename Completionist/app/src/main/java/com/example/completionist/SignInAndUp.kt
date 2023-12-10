@@ -49,9 +49,13 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
     }
 
     override fun onSendLinkClick(email: String) {
-        Toast.makeText(this, "${email}", Toast.LENGTH_SHORT).show()
         if(isValidEmail(email)){
-            Toast.makeText(this, "Valid email", Toast.LENGTH_SHORT).show()
+            firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener {
+                if(it.isSuccessful){
+                    Toast.makeText(this, "Link Sent", Toast.LENGTH_SHORT).show()
+                    switchFragment(SignIn())
+                }
+            }
         }else{
             Toast.makeText(this, "Not Valid email", Toast.LENGTH_SHORT).show()
         }
