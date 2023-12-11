@@ -1,6 +1,7 @@
 package com.example.completionist.ProfiePage
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Im
 import android.util.Log
@@ -58,15 +59,28 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         val settingsIcon = view.findViewById<ImageView>(R.id.settingsicon_profilepage)
 
 
-        usersRef.child(currUser.uid).get().addOnSuccessListener {
-          //  currUserData = User(currUser.uid, it.child("username").value.toString(), it.child("email").value.toString(), it.child("level").value.toString().toInt(), it.child("xp").value.toString().toInt(), it.child("streak").value.toString().toInt(), it.child("consistency").value.toString().toInt(), it.child("friendCount").value.toString().toInt())
-            userName.text = it.child("username").value.toString()
-            userPoints.text = it.child("level").value.toString()
-            userPartySize.text = it.child("friendCount").value.toString()
+//        usersRef.child(currUser.uid).get().addOnSuccessListener {
+//          //  currUserData = User(currUser.uid, it.child("username").value.toString(), it.child("email").value.toString(), it.child("level").value.toString().toInt(), it.child("xp").value.toString().toInt(), it.child("streak").value.toString().toInt(), it.child("consistency").value.toString().toInt(), it.child("friendCount").value.toString().toInt())
+//            userName.text = it.child("username").value.toString()
+//            userPoints.text = it.child("level").value.toString()
+//            userPartySize.text = it.child("friendCount").value.toString()
+//
+//            Log.i("firebase", "Got username value ${it.value}")
+//        }.addOnFailureListener{
+//            Log.e("firebase", "Error getting data", it)
+//        }
 
-            Log.i("firebase", "Got username value ${it.value}")
-        }.addOnFailureListener{
-            Log.e("firebase", "Error getting data", it)
+        val args = arguments
+        if(args!=null){
+            val currentUserData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                args.getSerializable("USER_DATA", User::class.java) as? User
+            } else {
+                args.getSerializable("USER_DATA") as? User
+            }
+            userName.text = currentUserData?.username
+            userPoints.text = "Level ${currentUserData?.level.toString()}"
+            userPartySize.text = "${currentUserData?.friendCount.toString()} Party Members"
+//            Log.v("Profile page user data", "${currentUserData}")
         }
 
         homePageNav.setOnClickListener{
