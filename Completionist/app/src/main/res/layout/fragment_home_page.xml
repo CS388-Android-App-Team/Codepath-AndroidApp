@@ -112,14 +112,41 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="43dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/michroma"
-        android:text="Party Members"
+        android:text="Party"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/home_page_party"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_page_quests" />
+
+    <Button
+        android:id="@+id/addFriendButton"
+        android:layout_width="89dp"
+        android:layout_height="51dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
+        android:text="Invite"
+        app:layout_constraintBottom_toTopOf="@+id/home_page_party"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="218dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/home_page_party"
+        app:layout_constraintEnd_toStartOf="@+id/addFriendButton"
+        app:layout_constraintHorizontal_bias="0.637"
+        app:layout_constraintStart_toEndOf="@+id/textView2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/newCompanionEntry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Hero Name"
+            android:inputType="text"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

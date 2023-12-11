@@ -59,10 +59,10 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
 
 
         usersRef.child(currUser.uid).get().addOnSuccessListener {
-            currUserData = User(currUser.uid, it.child("username").value.toString(), it.child("email").value.toString(), it.child("level").value.toString().toInt(), it.child("xp").value.toString().toInt(), it.child("streak").value.toString().toInt(), it.child("consistency").value.toString().toInt(), it.child("friendCount").value.toString().toInt())
-            userName.text = currUserData.username
-            userPoints.text = currUserData.xp.toString() + "/100"
-            userPartySize.text = currUserData.friendCount.toString()
+          //  currUserData = User(currUser.uid, it.child("username").value.toString(), it.child("email").value.toString(), it.child("level").value.toString().toInt(), it.child("xp").value.toString().toInt(), it.child("streak").value.toString().toInt(), it.child("consistency").value.toString().toInt(), it.child("friendCount").value.toString().toInt())
+            userName.text = it.child("username").value.toString()
+            userPoints.text = it.child("level").value.toString()
+            userPartySize.text = it.child("friendCount").value.toString()
 
             Log.i("firebase", "Got username value ${it.value}")
         }.addOnFailureListener{
