@@ -9,24 +9,25 @@ import com.example.completionist.HomePage.HomePage
 import com.example.completionist.ProfiePage.ProfilePage
 import com.example.completionist.ProfiePage.SettingsPage
 import com.example.completionist.TaskPage.TaskPage
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 
 class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var recievedIntent: Intent
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, HomePage())
             .commit()
-    /*  testing basic connection to realtime db
-        val database = Firebase.database
-        val myRef = database.getReference("message")
-        myRef.setValue("Hello, World!")
 
-     */
 
         firebaseAuth = FirebaseAuth.getInstance()
         recievedIntent = intent
@@ -94,4 +95,5 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
             .addToBackStack(null) // Optionally add to back stack
             .commit()
     }
+
 }
