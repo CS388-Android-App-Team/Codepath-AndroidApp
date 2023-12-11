@@ -10,6 +10,7 @@ import com.example.completionist.HomePage.HomePage
 import com.example.completionist.signinandup.ForgotPassword
 import com.example.completionist.signinandup.SignIn
 import com.example.completionist.signinandup.SignUp
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
@@ -85,7 +86,7 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
                     Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
                 }
             }else{
-                Toast.makeText(this, "Invalid Password, must be 8 character long and have one capital letter and one special symbol", Toast.LENGTH_SHORT).show()
+                Snackbar.make(findViewById(android.R.id.content), "Invalid Password, must be 8 character long and have one capital letter and one special symbol", Snackbar.LENGTH_LONG).show()
             }
         }else{
             Toast.makeText(this, "Not Valid email", Toast.LENGTH_SHORT).show()
