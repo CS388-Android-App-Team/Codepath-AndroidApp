@@ -1,3 +1,5 @@
+package com.example.completionist.Quests
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -8,7 +10,6 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.R
-import com.example.completionist.TaskPage.Quest
 
 class QuestAdapter(private val questList: MutableList<Quest>, private val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -19,7 +20,7 @@ class QuestAdapter(private val questList: MutableList<Quest>, private val contex
     inner class QuestViewHolder(item: View) : RecyclerView.ViewHolder(item) {
         val questName: TextView? = item.findViewById(R.id.quest_name_task)
         val questPoints: TextView? = item.findViewById(R.id.quest_points_amount)
-        val questStartToEndDate: TextView? = item.findViewById(R.id.quest_start_to_end_date)
+        val questDate: TextView? = item.findViewById(R.id.quest_date)
         val complete: CheckBox? = item.findViewById(R.id.quest_complete_task)
         val moreOptions: View = item.findViewById(R.id.popup_menu)
     }
@@ -45,14 +46,35 @@ class QuestAdapter(private val questList: MutableList<Quest>, private val contex
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is QuestViewHolder) {
             val quest = questList[position]
-            holder.questName?.text = quest.questName
-            holder.questPoints?.text = "+" + quest.questPoints.toString()
-            holder.questStartToEndDate?.text = quest.questStartDate.toString() + " - " + quest.questEndDate.toString()
-            holder.complete?.isChecked = quest.isComplete
 
-            // Set up more options click listener
-            holder.moreOptions.setOnClickListener { showPopupMenu(holder.moreOptions, quest) }
+            holder.complete?.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    // Quest is marked as complete, remove it from the list
+                    questList.remove(quest)
+                    notifyDataSetChanged()
+                }
+            }
+
+            if (!quest.isComplete) {
+                // Display the quest details as usual
+                holder.questName?.text = quest.questName
+                holder.questPoints?.text = "+" + quest.questPoints.toString()
+                holder.questDate?.text = quest.questDate.toString()
+                holder.complete?.isChecked = quest.isComplete
+
+                // Set up more options click listener
+                holder.moreOptions.setOnClickListener { showPopupMenu(holder.moreOptions, quest) }
+            } else {
+                // Hide or handle completed quests as needed
+                holder.itemView.visibility = View.GONE
+            }
         }
+    }
+
+    fun updateQuests(newQuests: List<Quest>) {
+        questList.clear()
+        questList.addAll(newQuests)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

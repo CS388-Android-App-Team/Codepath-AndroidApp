@@ -1,4 +1,4 @@
-package com.example.completionist.TaskPage
+package com.example.completionist.Quests
 
 import android.os.Build
 import android.os.Parcel
@@ -9,15 +9,13 @@ import java.time.LocalDate
 data class Quest(
     val questName: String?,
     val questPoints: Int?,
-    val questStartDate: LocalDate,
-    val questEndDate: LocalDate,
+    val questDate: LocalDate,
     val isComplete: Boolean
 ) : Parcelable {
     @RequiresApi(Build.VERSION_CODES.O)
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readInt(),
-        parcel.readSerializable() as LocalDate,
         parcel.readSerializable() as LocalDate,
         parcel.readByte() != 0.toByte()
     )
@@ -28,8 +26,7 @@ data class Quest(
         if (questPoints != null) {
             parcel.writeInt(questPoints)
         }
-        parcel.writeSerializable(questStartDate)
-        parcel.writeSerializable(questEndDate)
+        parcel.writeSerializable(questDate)
         parcel.writeByte(if (isComplete) 1 else 0)
     }
 

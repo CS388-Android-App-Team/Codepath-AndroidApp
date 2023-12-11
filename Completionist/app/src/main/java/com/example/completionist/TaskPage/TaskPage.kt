@@ -1,6 +1,6 @@
 package com.example.completionist.TaskPage
 
-import QuestAdapter
+import com.example.completionist.Quests.QuestAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.OnNavigationItemClickListener
+import com.example.completionist.Quests.Quest
 import com.example.completionist.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -36,15 +37,21 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
     private val ADD_NEW_QUEST_REQUEST_CODE = 123
     private var listener: OnNavigationItemClickListener? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun addNewQuest(
         questName: String?,
         questPoints: Int?,
-        questStartDate: LocalDate,
-        questEndDate: LocalDate
+        questDate: LocalDate
     ) {
-        val newQuest = Quest(questName, questPoints, questStartDate, questEndDate, false)
+        val newQuest = Quest(questName, questPoints, questDate, false)
         questList.add(newQuest)
-        questAdapter.notifyDataSetChanged()
+        updateQuestsAdapter()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun updateQuestsAdapter() {
+        val filteredQuests = questList.filter { it.questDate == currentDate && !it.isComplete }
+        questAdapter.updateQuests(filteredQuests)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -54,19 +61,21 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         if (requestCode == ADD_NEW_QUEST_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
-
             // Retrieve quest details from the resultIntent
             val questName = data?.getStringExtra("QUEST_NAME")
             val questPoints = data?.getIntExtra("QUEST_POINTS", 0)
-            val questStartDateStr = data?.getStringExtra("QUEST_START_DATE")
-            val questEndDateStr = data?.getStringExtra("QUEST_END_DATE")
+            val questDateStr = data?.getStringExtra("QUEST_DATE")
 
-            // Parse date strings to LocalDate
-            val questStartDate = LocalDate.parse(questStartDateStr, formatter)
-            val questEndDate = LocalDate.parse(questEndDateStr, formatter)
+            // Check if questDateStr is not empty before parsing
+            val questDate = if (!questDateStr.isNullOrEmpty()) {
+                LocalDate.parse(questDateStr, formatter)
+            } else {
+                // Use some default value or handle it accordingly
+                LocalDate.now()
+            }
 
             // Call addNewQuest function with the retrieved quest details
-            addNewQuest(questName, questPoints, questStartDate, questEndDate)
+            addNewQuest(questName, questPoints, questDate)
         }
     }
 
@@ -109,11 +118,13 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         changeDateArrowRight.setOnClickListener {
             currentDate = currentDate.plusDays(1)
             updateDateText()
+            updateQuestsAdapter()
         }
 
         changeDateArrowLeft.setOnClickListener {
             currentDate = currentDate.minusDays(1)
             updateDateText()
+            updateQuestsAdapter()
         }
 
         addNewQuestButton.setOnClickListener {
