@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.completionist.HomePage.HomePage
@@ -86,7 +88,9 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
                     Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
                 }
             }else{
-                Snackbar.make(findViewById(android.R.id.content), "Invalid Password, must be 8 character long and have one capital letter and one special symbol", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(findViewById(android.R.id.content), "Invalid Password, must be 8 character long and have one capital letter and one special symbol", Snackbar.LENGTH_LONG).apply {
+                    view.layoutParams = (view.layoutParams as FrameLayout.LayoutParams).apply { gravity = Gravity.CENTER }
+                }.show()
             }
         }else{
             Toast.makeText(this, "Not Valid email", Toast.LENGTH_SHORT).show()
