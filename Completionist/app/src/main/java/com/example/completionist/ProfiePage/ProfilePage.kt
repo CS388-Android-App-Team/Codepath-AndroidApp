@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import com.example.completionist.OnNavigationItemClickListener
 import com.example.completionist.R
 import com.example.completionist.User
+import com.example.completionist.UserViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -27,7 +29,9 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
     private lateinit var usersRef: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var currUser: FirebaseUser
-    private lateinit var currUserData: User
+    private var currUserData: User? = null
+
+    private lateinit var userViewModel: UserViewModel // Initialize the UserViewModel variable
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -45,6 +49,10 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         firebaseAuth.currentUser?.let { us ->
             currUser = us }
 
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        val uid = firebaseAuth.currentUser?.uid ?: ""
+
         val homePageNav = view.findViewById<View>(R.id.home_nav)
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
@@ -58,28 +66,10 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         val settingsIcon = view.findViewById<ImageView>(R.id.settingsicon_profilepage)
 
 
-//        usersRef.child(currUser.uid).get().addOnSuccessListener {
-//          //  currUserData = User(currUser.uid, it.child("username").value.toString(), it.child("email").value.toString(), it.child("level").value.toString().toInt(), it.child("xp").value.toString().toInt(), it.child("streak").value.toString().toInt(), it.child("consistency").value.toString().toInt(), it.child("friendCount").value.toString().toInt())
-//            userName.text = it.child("username").value.toString()
-//            userPoints.text = it.child("level").value.toString()
-//            userPartySize.text = it.child("friendCount").value.toString()
-//
-//            Log.i("firebase", "Got username value ${it.value}")
-//        }.addOnFailureListener{
-//            Log.e("firebase", "Error getting data", it)
-//        }
-
-        val args = arguments
-        if(args!=null){
-            val currentUserData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                args.getSerializable("USER_DATA", User::class.java) as? User
-            } else {
-                args.getSerializable("USER_DATA") as? User
-            }
-            userName.text = currentUserData?.username
-            userPoints.text = "Level ${currentUserData?.level.toString()}"
-            userPartySize.text = "${currentUserData?.friendCount.toString()} Party Members"
-//            Log.v("Profile page user data", "${currentUserData}")
+        userViewModel.getUserById(uid).observe(viewLifecycleOwner){user ->
+            userName.text = user?.username
+            userPoints.text = "Level ${user?.level.toString()}"
+            userPartySize.text = "${user?.friendCount.toString()} Party Members"
         }
 
         homePageNav.setOnClickListener{
