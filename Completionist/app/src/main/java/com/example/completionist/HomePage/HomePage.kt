@@ -165,7 +165,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
                     }
                         else{
                             Log.e("firebase", "user $friendName may not exist")
-                            Toast.makeText(activity, "User does not exist :(", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(activity, "Character not created yet:(", Toast.LENGTH_SHORT).show()
                         }
                     }.addOnFailureListener{
                         //invalid username entry

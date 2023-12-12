@@ -32,7 +32,7 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
             .commit()
 
         firebaseAuth = FirebaseAuth.getInstance()
-        Log.v("firebase isntance sign in", "${firebaseAuth.currentUser?.uid}")
+        Log.v("firebase instance sign in", "${firebaseAuth.currentUser?.uid}")
         database = Firebase.database
         usersRef = database.getReference("users")
     }

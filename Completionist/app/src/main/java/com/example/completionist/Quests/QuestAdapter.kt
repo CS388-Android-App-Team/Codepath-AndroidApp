@@ -37,6 +37,7 @@ class QuestAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val context = parent.context
+
         return when (viewType) {
             VIEW_TYPE_QUEST -> {
                 val view = LayoutInflater.from(context)
@@ -53,6 +54,8 @@ class QuestAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is QuestViewHolder) {
+
+
             val quest = questList[position]
             val questXp = quest.questPoints
 
@@ -65,6 +68,7 @@ class QuestAdapter(
                     Log.i("User Level", "Old XP + Completion XP: $oldXP + $moreXP}")
                     if (oldXP != null && moreXP != null) {
                         MainActivity().updateCurrentUser(newXp = (oldXP + moreXP))
+                        //update realtime database here = TODO()
                         Log.i("User Level", "New XP: ${oldXP + moreXP}")
                         Toast.makeText(MainActivity(), "You gained $moreXP XP", Toast.LENGTH_SHORT).show()
                     }
