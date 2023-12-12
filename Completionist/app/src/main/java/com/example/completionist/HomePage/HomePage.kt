@@ -79,8 +79,6 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 
         questRecyclerView.layoutManager = layoutManagerQuest
         questRecyclerView.adapter = questAdapter
-
-        //usernameDisplay.text = currUserData.username
 //        partyRecyclerView.adapter = partyMemberAdapter
 
 
