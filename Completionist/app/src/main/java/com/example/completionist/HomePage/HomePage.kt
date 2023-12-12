@@ -28,7 +28,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
             listener = context
             val questDatabase = QuestDatabase.getDatabase(requireContext())
             val questDao = questDatabase.questDao()
-            questAdapter = QuestAdapter(mutableListOf(), context, questDao)
+            questAdapter = QuestAdapter(mutableListOf(), requireContext(), questDao, true)
             questViewModel =
                 ViewModelProvider(this, QuestViewModelFactory(requireActivity().application))
                     .get(QuestViewModel::class.java)

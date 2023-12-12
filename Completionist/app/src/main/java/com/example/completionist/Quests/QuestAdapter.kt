@@ -16,7 +16,8 @@ import kotlinx.coroutines.launch
 class QuestAdapter(
     private val questList: MutableList<Quest>,
     private val context: Context,
-    private val questDao: QuestDao
+    private val questDao: QuestDao,
+    private val isHomePage: Boolean // Add a flag to indicate whether it's the homepage
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_QUEST = 1
@@ -41,8 +42,14 @@ class QuestAdapter(
                 QuestViewHolder(view)
             }
             else -> {
+                val emptyLayoutRes = if (isHomePage) {
+                    R.layout.home_quest_empty_view_layout
+                } else {
+                    R.layout.task_quest_empty_view_layout
+                }
+
                 val emptyView = LayoutInflater.from(context)
-                    .inflate(R.layout.home_quest_empty_view_layout, parent, false)
+                    .inflate(emptyLayoutRes, parent, false)
                 EmptyViewHolder(emptyView)
             }
         }
