@@ -58,6 +58,17 @@ class QuestAdapter(
 
             holder.complete?.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
+
+                    //add xp to user
+                    var oldXP: Int? = MainActivity().currentUserData?.xp
+                    var moreXP: Int? = questXp
+                    Log.i("User Level", "Old XP + Completion XP: $oldXP + $moreXP}")
+                    if (oldXP != null && moreXP != null) {
+                        MainActivity().updateCurrentUser(newXp = (oldXP + moreXP))
+                        Log.i("User Level", "New XP: ${oldXP + moreXP}")
+                        Toast.makeText(MainActivity(), "You gained $moreXP XP", Toast.LENGTH_SHORT).show()
+                    }
+
                     // Quest is marked as complete, remove it from the list and database
                     questList.remove(quest)
                     notifyDataSetChanged()
@@ -66,15 +77,7 @@ class QuestAdapter(
                         questDao.delete(quest)
                     }
                 }
-                //add xp to user
-                var oldXP: Int? = MainActivity().currentUserData?.xp
-                var moreXP: Int? = questXp
-                Log.i("User Level", "Old XP + Completion XP: $oldXP + $moreXP}")
-                if (oldXP != null && moreXP != null) {
-                    MainActivity().updateCurrentUser(newXp = (oldXP + moreXP))
-                    Log.i("User Level", "New XP: ${oldXP + moreXP}")
-                    Toast.makeText(MainActivity(), "You gained $moreXP XP", Toast.LENGTH_SHORT).show()
-                }
+
             }
 
             if (!quest.isComplete) {
