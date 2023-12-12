@@ -13,4 +13,8 @@ class QuestRepository(private val questDao: QuestDao) {
     suspend fun insert(quest: Quest) {
         questDao.insert(quest)
     }
+
+    fun getSortedQuests(): LiveData<List<Quest>> {
+        return questDao.getSortedQuests()
+    }
 }

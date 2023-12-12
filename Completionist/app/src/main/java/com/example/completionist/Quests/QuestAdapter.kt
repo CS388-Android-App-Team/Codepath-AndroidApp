@@ -83,6 +83,11 @@ class QuestAdapter(
     fun updateQuests(newQuests: List<Quest?>) {
         questList.clear()
         questList.addAll(newQuests.filterNotNull())
+        sortQuestsByDate()
+    }
+
+    private fun sortQuestsByDate() {
+        questList.sortBy { it.questDate }
         notifyDataSetChanged()
     }
 

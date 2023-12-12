@@ -21,6 +21,10 @@ class QuestViewModel(application: Application) : AndroidViewModel(application) {
         return repository.getQuestsByDate(date)
     }
 
+    fun getSortedQuests(): LiveData<List<Quest>> {
+        return repository.getSortedQuests()
+    }
+
     fun insert(quest: Quest) {
         viewModelScope.launch {
             repository.insert(quest)

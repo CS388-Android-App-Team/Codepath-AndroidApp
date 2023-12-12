@@ -13,6 +13,9 @@ interface QuestDao {
     @Query("SELECT * FROM quests WHERE quest_date = :date")
     fun getQuestsByDate(date: String): LiveData<List<Quest>>
 
+    @Query("SELECT * FROM quests ORDER BY quest_date ASC")
+    fun getSortedQuests(): LiveData<List<Quest>>
+
     @Query("SELECT * FROM quests")
     fun getAllQuests(): LiveData<List<Quest>>
 
