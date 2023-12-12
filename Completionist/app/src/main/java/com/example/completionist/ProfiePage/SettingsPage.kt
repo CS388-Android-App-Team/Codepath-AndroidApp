@@ -35,6 +35,8 @@ class SettingsPage : Fragment(R.layout.fragment_settings_page) {
         val changeEmail = view.findViewById<Button>(R.id.change_email_button)
         val changePassword = view.findViewById<Button>(R.id.change_password_button)
         val changeProfile = view.findViewById<Button>(R.id.changeUserInfo)
+        val changeReminder = view.findViewById<Button>(R.id.changeTimerInfo)
+
 
         val logoutButton = view.findViewById<Button>(R.id.logout)
 
@@ -63,6 +65,15 @@ class SettingsPage : Fragment(R.layout.fragment_settings_page) {
 
         changeProfile.setOnClickListener{
             val fragment = ChangeProfileSettings()
+            fragment.arguments = args
+            fragmentManager.beginTransaction()
+                .replace(settingsFragmentContainer.id, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        changeReminder.setOnClickListener{
+            val fragment = ChangeNotifTimerSettings()
             fragment.arguments = args
             fragmentManager.beginTransaction()
                 .replace(settingsFragmentContainer.id, fragment)

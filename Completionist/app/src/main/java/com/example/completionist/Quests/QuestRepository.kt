@@ -1,6 +1,7 @@
 package com.example.completionist.Quests
 
 import androidx.lifecycle.LiveData
+import com.example.completionist.User
 
 // QuestRepository.kt
 class QuestRepository(private val questDao: QuestDao) {

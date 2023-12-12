@@ -86,7 +86,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/changeUserInfo" />
+        app:layout_constraintTop_toBottomOf="@+id/changeTimerInfo" />
 
     <Button
         android:id="@+id/changeUserInfo"
@@ -106,6 +106,25 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/change_password_button" />
+
+    <Button
+        android:id="@+id/changeTimerInfo"
+        android:layout_width="312dp"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#D9D9D9"
+        android:fontFamily="@font/michroma"
+        android:text="Reminder Time"
+        android:textAlignment="textStart"
+        android:textColor="#222222"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeUserInfo" />
 
     <include
         android:id="@+id/include"
