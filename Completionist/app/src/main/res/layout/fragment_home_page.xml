@@ -62,14 +62,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_page_party"
-        android:layout_width="match_parent"
-        android:layout_height="232dp"
+        android:layout_width="386dp"
+        android:layout_height="245dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="84dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -98,6 +98,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo" />
 
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -114,30 +115,29 @@
 
     <Button
         android:id="@+id/addFriendButton"
-        android:layout_width="89dp"
-        android:layout_height="51dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="20dp"
-        android:text="Invite"
+        android:layout_width="61dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="4dp"
+        android:text="+"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/home_page_party"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_page_quests"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="218dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="20dp"
+    <EditText
+        android:id="@+id/newCompanionEntry"
+        android:layout_width="207dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="12dp"
+        android:hint="Invite Companion"
+        android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/home_page_party"
         app:layout_constraintEnd_toStartOf="@+id/addFriendButton"
-        app:layout_constraintHorizontal_bias="0.637"
-        app:layout_constraintStart_toEndOf="@+id/textView2">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/newCompanionEntry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Hero Name"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@+id/home_page_quests"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/fNameTextView"

@@ -53,9 +53,9 @@ class PartyAdapter (private val friendList: MutableList<Friend>):
             holder.friendName?.text =
                 friend.username // Assuming questName is a property in your Quest class
             holder.friendLevel?.text =
-                "LVL" + friend.level.toString() // Assuming questName is a property in your Quest class
+                "LVL: " + friend.level.toString() // Assuming questName is a property in your Quest class
             holder.friendStreak?.text =
-                friend.streak.toString() + "Days"  // Assuming questName is a property in your Quest class
+                friend.streak.toString() + " Days"  // Assuming questName is a property in your Quest class
             holder.friendConsistency?.text =
                 friend.consistency.toString() + "%"  // Assuming questName is a property in your Quest class
         }
