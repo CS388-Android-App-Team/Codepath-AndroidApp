@@ -63,14 +63,14 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         val friendList = mutableListOf<Friend>()
         val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
         val layoutManagerParty =  GridLayoutManager(requireContext(), 1)
-        val usernameDisplay = view.findViewById<TextView>(R.id.username)
+        val fnameDisplay = view.findViewById<TextView>(R.id.fNameTextView)
 
         partyRecyclerView.layoutManager = layoutManagerParty
 
         //this also sucks
         usersRef.get().addOnSuccessListener { users ->
             // var friendCount = users.child(currUser.uid).child("friends").childrenCount
-            usernameDisplay.text = users.child(currUser.uid).child("username").value.toString()
+            fnameDisplay.text = users.child(currUser.uid).child("firstName").value.toString()
 
              users.child(currUser.uid).child("friends").children.forEach(){ friendListEntry ->
 
