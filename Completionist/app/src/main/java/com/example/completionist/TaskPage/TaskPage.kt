@@ -89,8 +89,6 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         }
     }
 
-
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnNavigationItemClickListener) {
@@ -118,36 +116,19 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
             // Extract data from the returned intent using correct keys
             val questName = data?.getStringExtra("QUEST_NAME")
             val questPoints = data?.getIntExtra("QUEST_POINTS", 0)
-            val questDate = data?.getStringExtra("QUEST_DATE")
+            var questDate = data?.getStringExtra("QUEST_DATE")
 
-            // Check if the data is not null
-            if (questName != null && questPoints != null && questDate != null) {
+            // Check if the data is not null and questDate is empty
+            if (questName != null && questPoints != null) {
+                // Use the current selected date as default
+                questDate = questDate.takeIf { it?.isNotEmpty() == true } ?: currentDate.format(dateFormatter)
+
                 // Add the new quest using the data
                 addNewQuest(questName, questPoints, questDate)
             }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun addTempQuests() {
-        // Add some temporary quests for testing
-        val quest1 = Quest("Quest 1", 10, currentDate.toString(), false)
-        val quest2 = Quest("Quest 2", 20, currentDate.toString(), false)
-        val quest3 = Quest("Quest 3", 15, currentDate.toString(), false)
-
-        lifecycleScope.launch {
-            val questDatabase = QuestDatabase.getDatabase(requireContext())
-            val questDao = questDatabase.questDao()
-
-            // Insert temporary quests into the database
-            questDao.insert(quest1)
-            questDao.insert(quest2)
-            questDao.insert(quest3)
-
-            // Update the UI with the latest data
-            updateQuestsAdapter()
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -160,9 +141,6 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         questRecyclerView.layoutManager = layoutManagerQuest
         questRecyclerView.adapter = questAdapter
 
-        // Add some temporary quests for testing
-        addTempQuests()
-
         val addNewQuestButton = view.findViewById<ImageView>(R.id.add_new_quest_button_task)
 
         dateText = view.findViewById(R.id.selected_date_text)
@@ -171,6 +149,8 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
         // Set initial date
         updateDateText()
+
+        updateQuestsAdapter()
 
         // Handle arrow clicks
         changeDateArrowRight.setOnClickListener {

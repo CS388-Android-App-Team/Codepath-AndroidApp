@@ -36,7 +36,7 @@ class AddNewTaskPage : AppCompatActivity() {
             val questDateText = if (questDate.text.toString().isNotEmpty()) {
                 questDate.text.toString()
             } else {
-                // Use the current selected date as default
+                // Use the current selected date from TaskPage as default
                 val currentDate = intent.getStringExtra("CURRENT_DATE") ?: ""
                 currentDate
             }
