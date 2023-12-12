@@ -37,6 +37,7 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
         usersRef = database.getReference("users")
     }
 
+
     override fun onSignInClick(email: String, password: String) {
 //        Toast.makeText(this, "${email}, ${password}", Toast.LENGTH_SHORT).show()
         if(isValidEmail(email)){
@@ -163,15 +164,6 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
             .addToBackStack(null) // Optionally add to back stack
             .commit()
     }
-
-    fun isValidEmail(email: String): Boolean{
-        val emailPattern = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,})+\$")
-        return emailPattern.matches(email)
-    }
-    fun isValidPassword(password: String): Boolean {
-        val passwordPattern = Regex("^(?=.*[A-Z])(?=.*[!@#\$%^&*()-+])(?=\\S+\$).{8,}\$")
-        return passwordPattern.matches(password)
-    }
     fun writeNewUser(currUser: FirebaseUser, newEmail: String, fName: String, lName: String, uName: String) {
         val user = User(currUser.uid, uName, newEmail, fName, lName,0, 0, 0, 0, 0)
         usersRef.child(currUser.uid).setValue(user)
@@ -201,6 +193,15 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
             callback(true)
             Log.e("firebase", "Error checking username", it)
         }
+    }
+
+    fun isValidEmail(email: String): Boolean{
+        val emailPattern = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,})+\$")
+        return emailPattern.matches(email)
+    }
+    fun isValidPassword(password: String): Boolean {
+        val passwordPattern = Regex("^(?=.*[A-Z])(?=.*[!@#\$%^&*()-+])(?=\\S+\$).{8,}\$")
+        return passwordPattern.matches(password)
     }
 
 }

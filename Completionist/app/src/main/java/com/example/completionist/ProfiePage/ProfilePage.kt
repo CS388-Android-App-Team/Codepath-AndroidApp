@@ -48,7 +48,6 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         val homePageNav = view.findViewById<View>(R.id.home_nav)
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
-        val signOutButton = view.findViewById<View>(R.id.signOutButtonProfile)
 
         val userName = view.findViewById<TextView>(R.id.username_profilepage)
         val userImage = view.findViewById<ImageView>(R.id.userImage_profilepage)
@@ -91,9 +90,6 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         }
         profilePageNav.setOnClickListener{
             listener?.onProfileClicked()
-        }
-        signOutButton.setOnClickListener{
-            listener?.onSignOutClicked()
         }
         settingsIcon.setOnClickListener(){listener?.onSettingsClicked()}
 
