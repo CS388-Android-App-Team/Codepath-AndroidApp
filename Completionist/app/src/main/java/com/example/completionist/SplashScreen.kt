@@ -18,6 +18,8 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+
+
         findViewById<View>(R.id.splashscreen).postDelayed({
             //        once room database setup change logic to check room DB for login status
             val isLoggedIn = false

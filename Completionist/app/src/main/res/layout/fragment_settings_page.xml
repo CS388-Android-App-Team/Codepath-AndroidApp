@@ -70,78 +70,6 @@
         app:layout_constraintTop_toBottomOf="@+id/change_email_button" />
 
     <Button
-        android:id="@+id/privacy_policy_button"
-        android:layout_width="312dp"
-        android:layout_height="45dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/michroma"
-        android:text="@string/settings_privacy_policy"
-        android:textAlignment="textStart"
-        android:textColor="#222222"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:typeface="serif"
-        android:backgroundTint="#D9D9D9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/change_password_button" />
-
-    <Button
-        android:id="@+id/notifications"
-        android:layout_width="312dp"
-        android:layout_height="45dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/michroma"
-        android:text="@string/settings_notifications"
-        android:textAlignment="textStart"
-        android:textColor="#222222"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:typeface="serif"
-        android:backgroundTint="#D9D9D9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/privacy_policy_button" />
-
-    <Button
-        android:id="@+id/blocked_accounts_button"
-        android:layout_width="312dp"
-        android:layout_height="45dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/michroma"
-        android:text="@string/settings_block_accounts"
-        android:textAlignment="textStart"
-        android:textColor="#222222"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:typeface="serif"
-        android:backgroundTint="#D9D9D9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notifications" />
-
-    <Button
-        android:id="@+id/about_button"
-        android:layout_width="312dp"
-        android:layout_height="45dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/michroma"
-        android:text="@string/settings_about"
-        android:textAlignment="textStart"
-        android:textColor="#222222"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:typeface="serif"
-        android:backgroundTint="#D9D9D9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blocked_accounts_button" />
-
-    <Button
         android:id="@+id/logout"
         android:layout_width="312dp"
         android:layout_height="45dp"
@@ -156,8 +84,28 @@
         android:textStyle="bold"
         android:typeface="serif"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/about_button" />
+        app:layout_constraintTop_toBottomOf="@+id/changeUserInfo" />
+
+    <Button
+        android:id="@+id/changeUserInfo"
+        android:layout_width="312dp"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#D9D9D9"
+        android:fontFamily="@font/michroma"
+        android:text="Change Personal Info"
+        android:textAlignment="textStart"
+        android:textColor="#222222"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_password_button" />
 
     <include
         android:id="@+id/include"
@@ -169,6 +117,14 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/settingsfragmentcontainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

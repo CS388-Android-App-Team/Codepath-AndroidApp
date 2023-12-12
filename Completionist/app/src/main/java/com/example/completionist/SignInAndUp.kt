@@ -37,6 +37,7 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
         usersRef = database.getReference("users")
     }
 
+
     override fun onSignInClick(email: String, password: String) {
 //        Toast.makeText(this, "${email}, ${password}", Toast.LENGTH_SHORT).show()
         if(isValidEmail(email)){
@@ -46,9 +47,20 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
                     val userId = currentUser?.uid ?: ""
                     Log.v("Sign In and Up", "$currentUser, $userId")
 
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.putExtra("USER_UID", userId)
-                    startActivity(intent)
+//                    Get current user information from realtime DB
+                    getUserInfo(userId){user ->
+                        if(user!=null){
+                            val userData = User(user.idToken, user.username, user.email, user.firstName, user.lastName, user.level, user.xp, user.streak, user.consistency, user.friendCount)
+
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.putExtra("USER_UID", userId)
+                            intent.putExtra("USER_DATA", userData)
+                            startActivity(intent)
+                        }else{
+                            Log.e("User Info", "Failed to fetch data")
+                        }
+                    }
+
                 }else{
                     Toast.makeText(this, "Failed to sign in", Toast.LENGTH_SHORT).show()
                 }
@@ -76,22 +88,30 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
         lName: String,
         email: String,
         password: String,
-        passwordConfirm: String
+        passwordConfirm: String,
+        userName: String
     ) {
         if(isValidEmail(email)){
             if(isValidPassword(password)){
                 if(password == passwordConfirm){
-                    firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{
-                        if (it.isSuccessful){
-                            val currentUser = firebaseAuth.currentUser
-                            val userId = currentUser?.uid ?: ""
-                            if (currentUser != null) {
-                                writeNewUser(currentUser, email)
+                    isValidUserName(userName) { isValid ->
+                        if (isValid) {
+                            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{
+                                if (it.isSuccessful){
+                                    val currentUser = firebaseAuth.currentUser
+                                    val userId = currentUser?.uid ?: ""
+                                    if (currentUser != null) {
+                                        writeNewUser(currentUser, email, fName, lName, userName)
+                                    }
+                                    Log.v("Sign In and Up", "$currentUser, $userId")
+                                    Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show()
+                                    switchFragment(SignIn())
+                                }else{
+                                    Toast.makeText(this, "Could not create user", Toast.LENGTH_SHORT).show()
+                                }
                             }
-                            Log.v("Sign In and Up", "$currentUser, $userId")
-                            switchFragment(SignIn())
-                        }else{
-                            Toast.makeText(this, "Could not create user", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }else{
@@ -144,6 +164,36 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
             .addToBackStack(null) // Optionally add to back stack
             .commit()
     }
+    fun writeNewUser(currUser: FirebaseUser, newEmail: String, fName: String, lName: String, uName: String) {
+        val user = User(currUser.uid, uName, newEmail, fName, lName,0, 0, 0, 0, 0)
+        usersRef.child(currUser.uid).setValue(user)
+        usersRef.child(currUser.uid).child("friends").child("testUID").setValue(false)
+    }
+    fun getUserInfo(uid: String, callback: (User?) -> Unit) {
+        usersRef.child(uid).get().addOnSuccessListener { dataSnapshot ->
+            val user = dataSnapshot.getValue(User::class.java)
+            callback(user)
+        }.addOnFailureListener { exception ->
+            callback(null) // Sending null in case of failure
+            Log.e("firebase-signin", "Error getting data", exception)
+        }
+    }
+
+    fun isValidUserName(userName: String, callback: (Boolean) -> Unit) {
+        usersRef.orderByChild("username").equalTo(userName).get().addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                // Username already exists in the database
+                callback(false)
+            } else {
+                // Username does not exist in the database
+                callback(true)
+            }
+        }.addOnFailureListener {
+            // Error occurred while fetching data, consider it as a valid username
+            callback(true)
+            Log.e("firebase", "Error checking username", it)
+        }
+    }
 
     fun isValidEmail(email: String): Boolean{
         val emailPattern = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,})+\$")
@@ -153,12 +203,5 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
         val passwordPattern = Regex("^(?=.*[A-Z])(?=.*[!@#\$%^&*()-+])(?=\\S+\$).{8,}\$")
         return passwordPattern.matches(password)
     }
-    fun writeNewUser(currUser: FirebaseUser, newEmail: String) {
-        val user = User(currUser.uid, newEmail, newEmail, 0, 0, 0, 0, 0)
-        usersRef.child(currUser.uid).setValue(user)
-        usersRef.child(currUser.uid).child("friends").child("testUID").setValue(false)
-    }
-
-
 
 }

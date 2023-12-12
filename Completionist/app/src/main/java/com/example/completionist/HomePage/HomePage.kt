@@ -62,7 +62,6 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)
         val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
-        val usernameDisplay = view.findViewById<TextView>(R.id.username)
         val newFriendButton = view.findViewById<Button>(R.id.addFriendButton)
         val newFriendName = view.findViewById<EditText>(R.id.newCompanionEntry)
 
