@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.completionist.MainActivity
 import com.example.completionist.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -51,8 +52,7 @@ class AddNewTaskPage : AppCompatActivity() {
         }
 
         declineButton.setOnClickListener {
-            val intent = Intent(this, TaskPage::class.java)
-            startActivity(intent)
+            onBackPressed()
         }
     }
 }
