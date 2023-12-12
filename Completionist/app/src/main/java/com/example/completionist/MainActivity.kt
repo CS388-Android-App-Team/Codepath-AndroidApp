@@ -22,7 +22,7 @@ import com.google.firebase.database.database
 class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var recievedIntent: Intent
-    private var currentUserData: User? = null
+    var currentUserData: User? = null
 
     private lateinit var database: FirebaseDatabase
     private lateinit var usersRef: DatabaseReference

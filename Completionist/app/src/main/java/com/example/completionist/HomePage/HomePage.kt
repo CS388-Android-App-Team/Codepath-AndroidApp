@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -76,7 +77,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 
                  val friendObject = friendListEntry.key?.let { users.child(it) }
                  if (friendListEntry.value==true) {
-                     Log.i("firebase", "Got friend ${friendListEntry.key} entry")
+                    // Log.i("firebase", "Got friend ${friendListEntry.key} entry")
                      if (friendObject != null) {
                          Log.i("firebase", "Got friend ${friendObject.child("username").value} object")
                          friendList.add(
@@ -145,17 +146,21 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
                             if (it.child("friends").child(currUser.uid).value == false){
                                 usersRef.child(friendID).child("friends").child(currUser.uid).setValue(true)
                                 usersRef.child(currUser.uid).child("friends").child(friendID).setValue(true)
+                                Toast.makeText(activity, "New Companion!", Toast.LENGTH_SHORT).show()
                             }
                         }
                         //if they did not send a request to you, mark your request in your friends list
                         else{
                             usersRef.child(currUser.uid).child("friends").child(friendID).setValue(false)
+                            Toast.makeText(activity, "Invite Sent!", Toast.LENGTH_SHORT).show()
                         }
                     }.addOnFailureListener{
                         //invalid username entry
                         Log.e("firebase", "Error getting data, user $friendName may not exist", it)
+                        Toast.makeText(activity, "User does not exist :(", Toast.LENGTH_SHORT).show()
                     }
             }
+            newFriendName.setText("")
         }
 
         homePageNav.setOnClickListener{
