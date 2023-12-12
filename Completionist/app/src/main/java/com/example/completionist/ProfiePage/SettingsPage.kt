@@ -1,13 +1,16 @@
 package com.example.completionist.ProfiePage
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Button
+import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.FragmentManager
 import com.example.completionist.OnNavigationItemClickListener
 import com.example.completionist.R
+import com.example.completionist.User
 
 class SettingsPage : Fragment(R.layout.fragment_settings_page) {
 
@@ -29,6 +32,44 @@ class SettingsPage : Fragment(R.layout.fragment_settings_page) {
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
 
+        val changeEmail = view.findViewById<Button>(R.id.change_email_button)
+        val changePassword = view.findViewById<Button>(R.id.change_password_button)
+        val changeProfile = view.findViewById<Button>(R.id.changeUserInfo)
+
+        val logoutButton = view.findViewById<Button>(R.id.logout)
+
+        val fragmentManager: FragmentManager = childFragmentManager
+        val settingsFragmentContainer = view.findViewById<FragmentContainerView>(R.id.settingsfragmentcontainer)
+        val args = arguments
+
+
+        changeEmail.setOnClickListener{
+            val fragment = ChangeEmailSettings()
+            fragment.arguments = args
+            fragmentManager.beginTransaction()
+                .replace(settingsFragmentContainer.id, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        changePassword.setOnClickListener{
+            val fragment = ChangePasswordSettings()
+            fragment.arguments = args
+            fragmentManager.beginTransaction()
+                .replace(settingsFragmentContainer.id, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        changeProfile.setOnClickListener{
+            val fragment = ChangeProfileSettings()
+            fragment.arguments = args
+            fragmentManager.beginTransaction()
+                .replace(settingsFragmentContainer.id, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
         homePageNav.setOnClickListener{
             listener?.onHomeClicked()
         }
@@ -38,6 +79,7 @@ class SettingsPage : Fragment(R.layout.fragment_settings_page) {
         profilePageNav.setOnClickListener{
             listener?.onProfileClicked()
         }
+        logoutButton.setOnClickListener{listener?.onSignOutClicked()}
 
     }
 

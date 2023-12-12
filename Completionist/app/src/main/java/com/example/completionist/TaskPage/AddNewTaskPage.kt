@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
-import com.example.completionist.TaskPage.Quest
 import androidx.appcompat.app.AppCompatActivity
 import com.example.completionist.R
 import java.time.LocalDate
@@ -23,8 +21,7 @@ class AddNewTaskPage : AppCompatActivity() {
 
         val questName = findViewById<EditText>(R.id.quest_name)
         val questPoints = findViewById<EditText>(R.id.XP_amount)
-        val questStartDate = findViewById<EditText>(R.id.quest_start_date)
-        val questEndDate = findViewById<EditText>(R.id.quest_end_date)
+        val questDate = findViewById<EditText>(R.id.quest_date)
 
         val acceptButton = findViewById<ImageView>(R.id.accept_button)
         val declineButton = findViewById<ImageView>(R.id.decline_button)
@@ -34,25 +31,28 @@ class AddNewTaskPage : AppCompatActivity() {
         acceptButton.setOnClickListener {
             val questNameText = questName.text.toString()
             val questPointsText = questPoints.text.toString().toInt()
-            val questStartDateText = questStartDate.text.toString()
-            val questEndDateText = questEndDate.text.toString()
+
+            // Check if quest_date is empty
+            val questDateText = if (questDate.text.toString().isNotEmpty()) {
+                questDate.text.toString()
+            } else {
+                // Use the current selected date as default
+                val currentDate = intent.getStringExtra("CURRENT_DATE") ?: ""
+                currentDate
+            }
 
             val resultIntent = Intent()
             resultIntent.putExtra("QUEST_NAME", questNameText)
             resultIntent.putExtra("QUEST_POINTS", questPointsText)
-            resultIntent.putExtra("QUEST_START_DATE", questStartDateText)
-            resultIntent.putExtra("QUEST_END_DATE", questEndDateText)
+            resultIntent.putExtra("QUEST_DATE", questDateText)
 
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
-
         }
 
         declineButton.setOnClickListener {
             val intent = Intent(this, TaskPage::class.java)
             startActivity(intent)
         }
-
     }
-
 }

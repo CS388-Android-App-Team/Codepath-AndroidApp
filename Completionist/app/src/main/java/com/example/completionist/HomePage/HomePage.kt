@@ -131,7 +131,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
 
-        //this sucks I'll make it cleaner later - josh
+
         newFriendButton.setOnClickListener{
             val friendName = newFriendName.text
             usersRef.child(currUser.uid).get().addOnSuccessListener { us ->

@@ -4,9 +4,109 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#BFBEBE"
     tools:context=".ProfiePage.SettingsPage">
 
     <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="7dp"
+        android:src="@drawable/logo_with_hex"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/michroma"
+        android:text="@string/settings"
+        android:textColor="#333333"
+        android:textSize="24sp"
+        android:typeface="serif"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/change_email_button"
+        android:layout_width="312dp"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#D9D9D9"
+        android:fontFamily="@font/michroma"
+        android:text="@string/settings_change_email"
+        android:textAlignment="textStart"
+        android:textColor="#222222"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <Button
+        android:id="@+id/change_password_button"
+        android:layout_width="312dp"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/michroma"
+        android:text="@string/setting_change_password"
+        android:textAlignment="textStart"
+        android:textColor="#222222"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:backgroundTint="#D9D9D9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_email_button" />
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="312dp"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#D9D9D9"
+        android:fontFamily="@font/michroma"
+        android:text="@string/settings_logout"
+        android:textAlignment="textStart"
+        android:textColor="#222222"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeUserInfo" />
+
+    <Button
+        android:id="@+id/changeUserInfo"
+        android:layout_width="312dp"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#D9D9D9"
+        android:fontFamily="@font/michroma"
+        android:text="Change Personal Info"
+        android:textAlignment="textStart"
+        android:textColor="#222222"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_password_button" />
+
     <include
         android:id="@+id/include"
         layout="@layout/nav_bar"
@@ -18,15 +118,13 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/settingsfragmentcontainer"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="214dp"
-        android:layout_marginEnd="140dp"
-        android:text="Settings page"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/logout" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

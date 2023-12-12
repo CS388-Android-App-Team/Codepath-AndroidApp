@@ -51,108 +51,71 @@
         app:layout_constraintStart_toStartOf="@+id/SignUpPoly"
         app:layout_constraintTop_toTopOf="@+id/SignUpPoly" />
 
-    <TextView
-        android:id="@+id/FirstNameSUlabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/michroma"
-        android:text="First Name"
-        android:textAlignment="textStart"
-        app:layout_constraintBottom_toTopOf="@+id/FirstNameSU"
-        app:layout_constraintStart_toStartOf="@+id/FirstNameSU" />
-
     <EditText
         android:id="@+id/FirstNameSU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/shape_with_text"
         android:ems="10"
+        android:hint="First Name"
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/LastNameSU"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/LastNameSUlabel"
+    <EditText
+        android:id="@+id/userNameSU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/michroma"
-        android:text="Last Name"
-        android:textAlignment="textStart"
-        app:layout_constraintBottom_toTopOf="@+id/LastNameSU"
-        app:layout_constraintStart_toStartOf="@+id/LastNameSU" />
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shape_with_text"
+        android:ems="10"
+        android:hint="User Name"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/FirstNameSU"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/LastNameSU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/shape_with_text"
         android:ems="10"
+        android:hint="Last Name"
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/EmailSU"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/EmailSUlabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/michroma"
-        android:text="Email"
-        android:textAlignment="textStart"
-        app:layout_constraintBottom_toTopOf="@+id/EmailSU"
-        app:layout_constraintStart_toStartOf="@+id/EmailSU" />
 
     <EditText
         android:id="@+id/EmailSU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/shape_with_text"
         android:ems="10"
+        android:hint="Email"
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/PasswordSU"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/PasswordSULabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/michroma"
-        android:text="Password"
-        android:textAlignment="textStart"
-        app:layout_constraintBottom_toTopOf="@+id/PasswordSU"
-        app:layout_constraintStart_toStartOf="@+id/PasswordSU" />
-
     <EditText
         android:id="@+id/PasswordSU"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/shape_with_text"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/PasswordCSU"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/PasswordCSULabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/michroma"
-        android:text="Confirm Password"
-        android:textAlignment="textStart"
-        app:layout_constraintBottom_toTopOf="@+id/PasswordCSU"
-        app:layout_constraintStart_toStartOf="@+id/PasswordCSU" />
 
     <EditText
         android:id="@+id/PasswordCSU"
@@ -161,6 +124,7 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/shape_with_text"
         android:ems="10"
+        android:hint="Confirm Password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/SingUpButtonSU"
         app:layout_constraintEnd_toEndOf="parent"

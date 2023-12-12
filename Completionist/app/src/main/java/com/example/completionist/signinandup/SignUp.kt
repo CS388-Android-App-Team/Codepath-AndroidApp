@@ -28,6 +28,7 @@ class SignUp : Fragment(R.layout.fragment_sign_up) {
         super.onViewCreated(view, savedInstanceState)
 
         val firstNameEditBox = view.findViewById<EditText>(R.id.FirstNameSU)
+        val userNameEditBox = view.findViewById<EditText>(R.id.userNameSU)
         val lastNameEditBox = view.findViewById<EditText>(R.id.LastNameSU)
         val emailEditBox = view.findViewById<EditText>(R.id.EmailSU)
         val passwordEditBox = view.findViewById<EditText>(R.id.PasswordSU)
@@ -42,7 +43,8 @@ class SignUp : Fragment(R.layout.fragment_sign_up) {
                 lastNameEditBox.text.toString(),
                 emailEditBox.text.toString(),
                 passwordEditBox.text.toString(),
-                passwordCEditBox.text.toString())
+                passwordCEditBox.text.toString(),
+                userNameEditBox.text.toString())
         }
         backButton.setOnClickListener{ listener?.onBackClick() }
     }
