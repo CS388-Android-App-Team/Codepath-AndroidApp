@@ -138,25 +138,38 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
             usersRef.child(currUser.uid).get().addOnSuccessListener { us ->
                 usersRef.orderByChild("username").equalTo(friendName.toString()).get()
                     .addOnSuccessListener { fr ->
+                        if (fr.childrenCount > 0){
                         var it = fr.children.first()
                         val friendID = it.key.toString()
                         Log.i("firebase", "$it")
-                        if (it.child("friends").child(currUser.uid).exists()){
+                        if (it.child("friends").child(currUser.uid).exists()) {
                             //check if they sent a request to you, if yes then mark completed. if already friends, do nothing
-                            if (it.child("friends").child(currUser.uid).value == false){
-                                usersRef.child(friendID).child("friends").child(currUser.uid).setValue(true)
-                                usersRef.child(currUser.uid).child("friends").child(friendID).setValue(true)
-                                Toast.makeText(activity, "New Companion!", Toast.LENGTH_SHORT).show()
+                            if (it.child("friends").child(currUser.uid).value == false) {
+                                usersRef.child(friendID).child("friends").child(currUser.uid)
+                                    .setValue(true)
+                                usersRef.child(currUser.uid).child("friends").child(friendID)
+                                    .setValue(true)
+                                Toast.makeText(activity, "New Companion!", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                            else{
+                                Toast.makeText(activity, "You're already companions!", Toast.LENGTH_SHORT).show()
                             }
                         }
                         //if they did not send a request to you, mark your request in your friends list
-                        else{
-                            usersRef.child(currUser.uid).child("friends").child(friendID).setValue(false)
+                        else {
+                            usersRef.child(currUser.uid).child("friends").child(friendID)
+                                .setValue(false)
                             Toast.makeText(activity, "Invite Sent!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                        else{
+                            Log.e("firebase", "user $friendName may not exist")
+                            Toast.makeText(activity, "User does not exist :(", Toast.LENGTH_SHORT).show()
                         }
                     }.addOnFailureListener{
                         //invalid username entry
-                        Log.e("firebase", "Error getting data, user $friendName may not exist", it)
+                        Log.e("firebase", "Error getting data", it)
                         Toast.makeText(activity, "User does not exist :(", Toast.LENGTH_SHORT).show()
                     }
             }
