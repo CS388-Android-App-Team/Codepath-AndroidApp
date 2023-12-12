@@ -1,14 +1,28 @@
 package com.example.completionist
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.example.completionist.HomePage.HomePage
 import com.example.completionist.ProfiePage.ProfilePage
 import com.example.completionist.ProfiePage.SettingsPage
@@ -22,6 +36,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
     private lateinit var firebaseAuth: FirebaseAuth
@@ -38,8 +54,10 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        scheduleDailyNotification()
+//        sendBroadcast(Intent(this, NotificationReceiver::class.java))
 
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, HomePage())
@@ -73,19 +91,12 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         super.onResume()
         firebaseAuth = FirebaseAuth.getInstance()
 
-//        currentUserData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            recievedIntent.getSerializableExtra("USER_DATA", User::class.java) as? User
-//        } else {
-//            recievedIntent.getSerializableExtra("USER_DATA") as? User
-//        }
-
         databaseFirebase = Firebase.database
         usersRef = databaseFirebase.getReference("users")
 
         if(firebaseAuth.currentUser == null){
             onSignOutClicked()
         }
-        Log.v("MainActivity UID", "${firebaseAuth.currentUser?.uid}, recieved value: ${recievedIntent.getStringExtra("USER_UID")}" )
     }
     override fun onHomeClicked() {
         Log.v("NavBar", "Home Clicked")
@@ -229,6 +240,10 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         }
     }
 
+    override fun onReminderSaveClick() {
+        scheduleDailyNotification()
+    }
+
 
     private fun switchFragment(fragment: Fragment, data: Bundle? = null){
         val transaction = supportFragmentManager.beginTransaction()
@@ -264,6 +279,49 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         val passwordPattern = Regex("^(?=.*[A-Z])(?=.*[!@#\$%^&*()-+])(?=\\S+\$).{8,}\$")
         return passwordPattern.matches(password)
     }
+
+    fun scheduleDailyNotification() {
+        val currentTime = Calendar.getInstance()
+        val initialDelay = calculateInitialDelay(currentTime)
+
+        val notificationWorkRequest =
+            PeriodicWorkRequest.Builder(NotificationWorker::class.java, 24, TimeUnit.HOURS)
+                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .build()
+
+        WorkManager.getInstance(this).enqueue(notificationWorkRequest)
+    }
+
+    private fun calculateInitialDelay(currentTime: Calendar): Long {
+        val sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        val savedNotificationTime = getNotificationTime(this)
+        val savedHour = savedNotificationTime.first
+        val savedMinute = savedNotificationTime.second
+
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, savedHour) // Set the hour to 3 AM
+            set(Calendar.MINUTE, savedMinute)
+            set(Calendar.SECOND, 0)
+
+            // Check if the current time is after 3 AM, if so, set for the next day
+            if (before(currentTime) || equals(currentTime)) {
+                add(Calendar.DAY_OF_MONTH, 1)
+            }
+        }
+
+        return calendar.timeInMillis - currentTime.timeInMillis
+    }
+
+    // Retrieve notification time from SharedPreferences
+    fun getNotificationTime(context: Context): Pair<Int, Int> {
+        val sharedPrefs = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        val hourOfDay = sharedPrefs?.getInt("notification_hour", -1) ?: 12
+        val minute = sharedPrefs?.getInt("notification_minute", -1) ?: 0
+        return Pair(hourOfDay, minute)
+    }
+
+
 
 
 }
