@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class QuestAdapter(
     private val questList: MutableList<Quest>,
     private val context: Context,
-    private val questDao: QuestDao // Add this parameter
+    private val questDao: QuestDao
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_QUEST = 1
@@ -80,9 +80,9 @@ class QuestAdapter(
         }
     }
 
-    fun updateQuests(newQuests: List<Quest>) {
+    fun updateQuests(newQuests: List<Quest?>) {
         questList.clear()
-        questList.addAll(newQuests)
+        questList.addAll(newQuests.filterNotNull())
         notifyDataSetChanged()
     }
 
@@ -113,6 +113,9 @@ class QuestAdapter(
                     // Handle delete action
                     questList.remove(quest)
                     notifyDataSetChanged()
+                    GlobalScope.launch {
+                        questDao.delete(quest)
+                    }
                     true
                 }
                 // Add more menu items as needed

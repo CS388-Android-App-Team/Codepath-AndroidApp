@@ -1,3 +1,4 @@
+// QuestDatabase.kt
 package com.example.completionist.Quests
 
 import android.content.Context
@@ -5,7 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Quest::class], version = 1, exportSchema = false)
+@Database(entities = [Quest::class], version = 2)
 abstract class QuestDatabase : RoomDatabase() {
     abstract fun questDao(): QuestDao
 
@@ -19,7 +20,9 @@ abstract class QuestDatabase : RoomDatabase() {
                     context.applicationContext,
                     QuestDatabase::class.java,
                     "quest_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

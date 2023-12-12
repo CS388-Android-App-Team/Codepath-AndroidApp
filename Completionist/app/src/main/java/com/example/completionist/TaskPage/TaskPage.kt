@@ -1,6 +1,5 @@
 package com.example.completionist.TaskPage
 
-import com.example.completionist.Quests.QuestAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -11,18 +10,21 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.OnNavigationItemClickListener
 import com.example.completionist.Quests.Quest
+import com.example.completionist.Quests.QuestAdapter
 import com.example.completionist.Quests.QuestDatabase
+import com.example.completionist.Quests.QuestViewModel
+import com.example.completionist.Quests.QuestViewModelFactory
 import com.example.completionist.R
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-
-val questList = mutableListOf<Quest>()
-private lateinit var questAdapter: QuestAdapter
 
 class TaskPage : Fragment(R.layout.fragment_task_page) {
 
@@ -32,11 +34,14 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private var currentDate: LocalDate = LocalDate.now()
+
     @RequiresApi(Build.VERSION_CODES.O)
     private val dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.getDefault())
 
     private val ADD_NEW_QUEST_REQUEST_CODE = 123
     private var listener: OnNavigationItemClickListener? = null
+    private lateinit var questAdapter: QuestAdapter
+    private lateinit var questViewModel: QuestViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addNewQuest(
@@ -50,44 +55,41 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
             questDate = questDate,
             isComplete = false
         )
-        questList.add(newQuest)
-        updateQuestsAdapter()
+
+        // Insert new quest into the database
+        lifecycleScope.launch {
+            val questDatabase = QuestDatabase.getDatabase(requireContext())
+            val questDao = questDatabase.questDao()
+
+            // Log the quest details
+            println("Adding quest: $newQuest")
+
+            questDao.insert(newQuest)
+
+            // Update the UI with the latest data
+            updateQuestsAdapter()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateQuestsAdapter() {
-        val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy") // Adjust the pattern as needed
+        // Format the current date to match the database format
+        val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.getDefault()))
 
-        val filteredQuests = questList.filter {
-            LocalDate.parse(it.questDate, formatter) == currentDate && !it.isComplete
-        }
-        questAdapter.updateQuests(filteredQuests)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == ADD_NEW_QUEST_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-
-            // Retrieve quest details from the resultIntent
-            val questName = data?.getStringExtra("QUEST_NAME")
-            val questPoints = data?.getIntExtra("QUEST_POINTS", 0)
-            val questDateStr = data?.getStringExtra("QUEST_DATE")
-
-            // Check if questDateStr is not empty before parsing
-            val questDate = if (!questDateStr.isNullOrEmpty()) {
-                questDateStr
-            } else {
-                // Use some default value or handle it accordingly
-                LocalDate.now().toString()
+        questViewModel.getQuestsByDate(formattedDate).observe(viewLifecycleOwner) { quests ->
+            // Log the quests to check if they are being retrieved
+            quests?.let {
+                for (quest in it) {
+                    println("Quest Name: ${quest.questName}, Points: ${quest.questPoints}, Date: ${quest.questDate}")
+                }
             }
 
-            // Call addNewQuest function with the retrieved quest details
-            addNewQuest(questName, questPoints, questDate)
+            // Update the adapter with the latest quests
+            questAdapter.updateQuests(quests.orEmpty())
         }
     }
+
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -95,7 +97,9 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
             listener = context
             val questDatabase = QuestDatabase.getDatabase(requireContext())
             val questDao = questDatabase.questDao()
-            questAdapter = QuestAdapter(questList, context, questDao)
+            questAdapter = QuestAdapter(mutableListOf(), context, questDao)
+            questViewModel = ViewModelProvider(this, QuestViewModelFactory(requireActivity().application))
+                .get(QuestViewModel::class.java)
         } else {
             throw RuntimeException("$context must implement OnNavigationItemClickListener")
         }
@@ -107,15 +111,57 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == ADD_NEW_QUEST_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // Extract data from the returned intent using correct keys
+            val questName = data?.getStringExtra("QUEST_NAME")
+            val questPoints = data?.getIntExtra("QUEST_POINTS", 0)
+            val questDate = data?.getStringExtra("QUEST_DATE")
+
+            // Check if the data is not null
+            if (questName != null && questPoints != null && questDate != null) {
+                // Add the new quest using the data
+                addNewQuest(questName, questPoints, questDate)
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun addTempQuests() {
+        // Add some temporary quests for testing
+        val quest1 = Quest("Quest 1", 10, currentDate.toString(), false)
+        val quest2 = Quest("Quest 2", 20, currentDate.toString(), false)
+        val quest3 = Quest("Quest 3", 15, currentDate.toString(), false)
+
+        lifecycleScope.launch {
+            val questDatabase = QuestDatabase.getDatabase(requireContext())
+            val questDao = questDatabase.questDao()
+
+            // Insert temporary quests into the database
+            questDao.insert(quest1)
+            questDao.insert(quest2)
+            questDao.insert(quest3)
+
+            // Update the UI with the latest data
+            updateQuestsAdapter()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.quests_recycler_view)
 
-        val layoutManagerQuest =  GridLayoutManager(requireContext(), 2)
+        val layoutManagerQuest = GridLayoutManager(requireContext(), 2)
 
         questRecyclerView.layoutManager = layoutManagerQuest
         questRecyclerView.adapter = questAdapter
+
+        // Add some temporary quests for testing
+        addTempQuests()
 
         val addNewQuestButton = view.findViewById<ImageView>(R.id.add_new_quest_button_task)
 
@@ -148,13 +194,13 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
 
-        homePageNav.setOnClickListener{
+        homePageNav.setOnClickListener {
             listener?.onHomeClicked()
         }
-        taskPageNav.setOnClickListener{
+        taskPageNav.setOnClickListener {
             listener?.onTaskClicked()
         }
-        profilePageNav.setOnClickListener{
+        profilePageNav.setOnClickListener {
             listener?.onProfileClicked()
         }
     }

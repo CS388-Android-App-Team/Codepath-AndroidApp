@@ -1,27 +1,24 @@
 package com.example.completionist.Quests
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
-import androidx.room.Update
+
 
 @Dao
 interface QuestDao {
-    @Transaction
-    @Insert
+    @Query("SELECT * FROM quests WHERE quest_date = :date")
+    fun getQuestsByDate(date: String): LiveData<List<Quest>>
+
+    @Query("SELECT * FROM quests")
+    fun getAllQuests(): LiveData<List<Quest>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(quest: Quest)
 
-    @Transaction
-    @Update
-    suspend fun update(quest: Quest)
-
-    @Transaction
     @Delete
     suspend fun delete(quest: Quest)
-
-    @Transaction
-    @Query("SELECT * FROM quests")
-    suspend fun getAllQuests(): List<Quest>
 }

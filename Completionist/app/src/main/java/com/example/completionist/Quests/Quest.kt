@@ -2,18 +2,26 @@ package com.example.completionist.Quests
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "quests")
 data class Quest(
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0, // Primary key for Room database
+    val id: Long = 0,
 
-    var questName: String?,
-    var questPoints: Int?,
-    var questDate: String?,
-    var isComplete: Boolean
+    @ColumnInfo(name = "quest_name")
+    val questName: String?,
+
+    @ColumnInfo(name = "quest_points")
+    val questPoints: Int?,
+
+    @ColumnInfo(name = "quest_date")
+    val questDate: String?, // Assuming your date is stored as a String, you might want to use a proper Date type
+
+    @ColumnInfo(name = "is_complete")
+    val isComplete: Boolean
 ) : Parcelable {
 
     // Primary constructor used for creating instances in your code
@@ -35,10 +43,8 @@ data class Quest(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(questName)
-        if (questPoints != null) {
-            parcel.writeInt(questPoints!!)
-        }
-        parcel.writeSerializable(questDate)
+        questPoints?.let { parcel.writeInt(it) }
+        parcel.writeString(questDate)
         parcel.writeByte(if (isComplete) 1 else 0)
     }
 
