@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.OnNavigationItemClickListener
 import com.example.completionist.Quests.Quest
+import com.example.completionist.Quests.QuestDatabase
 import com.example.completionist.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -41,16 +42,25 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
     private fun addNewQuest(
         questName: String?,
         questPoints: Int?,
-        questDate: LocalDate
+        questDate: String?
     ) {
-        val newQuest = Quest(questName, questPoints, questDate, false)
+        val newQuest = Quest(
+            questName = questName,
+            questPoints = questPoints,
+            questDate = questDate,
+            isComplete = false
+        )
         questList.add(newQuest)
         updateQuestsAdapter()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateQuestsAdapter() {
-        val filteredQuests = questList.filter { it.questDate == currentDate && !it.isComplete }
+        val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy") // Adjust the pattern as needed
+
+        val filteredQuests = questList.filter {
+            LocalDate.parse(it.questDate, formatter) == currentDate && !it.isComplete
+        }
         questAdapter.updateQuests(filteredQuests)
     }
 
@@ -68,10 +78,10 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
             // Check if questDateStr is not empty before parsing
             val questDate = if (!questDateStr.isNullOrEmpty()) {
-                LocalDate.parse(questDateStr, formatter)
+                questDateStr
             } else {
                 // Use some default value or handle it accordingly
-                LocalDate.now()
+                LocalDate.now().toString()
             }
 
             // Call addNewQuest function with the retrieved quest details
@@ -83,7 +93,9 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         super.onAttach(context)
         if (context is OnNavigationItemClickListener) {
             listener = context
-            questAdapter = QuestAdapter(questList, context) // Initialize it here
+            val questDatabase = QuestDatabase.getDatabase(requireContext())
+            val questDao = questDatabase.questDao()
+            questAdapter = QuestAdapter(questList, context, questDao)
         } else {
             throw RuntimeException("$context must implement OnNavigationItemClickListener")
         }

@@ -10,9 +10,14 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.R
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class QuestAdapter(private val questList: MutableList<Quest>, private val context: Context) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class QuestAdapter(
+    private val questList: MutableList<Quest>,
+    private val context: Context,
+    private val questDao: QuestDao // Add this parameter
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_QUEST = 1
     private val VIEW_TYPE_EMPTY = 2
@@ -49,9 +54,13 @@ class QuestAdapter(private val questList: MutableList<Quest>, private val contex
 
             holder.complete?.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    // Quest is marked as complete, remove it from the list
+                    // Quest is marked as complete, remove it from the list and database
                     questList.remove(quest)
                     notifyDataSetChanged()
+                    // Delete from the database
+                    GlobalScope.launch {
+                        questDao.delete(quest)
+                    }
                 }
             }
 
