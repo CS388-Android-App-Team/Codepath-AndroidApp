@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.completionist.Friend
 import com.example.completionist.MainActivity
 import com.example.completionist.OnNavigationItemClickListener
 import com.example.completionist.R
@@ -59,10 +60,53 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         dummyQuestList.add(DummyQuest("New QUest", false))
         dummyQuestList.add(DummyQuest("New QUest", false))
 
+        val friendList = mutableListOf<Friend>()
+        val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
+        val layoutManagerParty =  GridLayoutManager(requireContext(), 1)
+        val usernameDisplay = view.findViewById<TextView>(R.id.username)
+
+        partyRecyclerView.layoutManager = layoutManagerParty
+
+        //this also sucks
+        usersRef.get().addOnSuccessListener { users ->
+            // var friendCount = users.child(currUser.uid).child("friends").childrenCount
+            usernameDisplay.text = users.child(currUser.uid).child("username").value.toString()
+
+             users.child(currUser.uid).child("friends").children.forEach(){ friendListEntry ->
+
+                 val friendObject = friendListEntry.key?.let { users.child(it) }
+                 if (friendListEntry.value==true) {
+                     Log.i("firebase", "Got friend ${friendListEntry.key} entry")
+                     if (friendObject != null) {
+                         Log.i("firebase", "Got friend ${friendObject.child("username").value} object")
+                         friendList.add(
+                             Friend(
+                                 friendObject.child("idToken").value.toString(),
+                                 friendObject.child("username").value.toString(),
+                                 friendObject.child("level").value.toString().toInt(),
+                                 friendObject.child("streak").value.toString().toInt(),
+                                 friendObject.child("consistency").value.toString().toInt()
+                             )
+                         )
+                     }
+                 }
+             }
+            Log.i("firebase", "Friend list is $friendList")
+
+            partyRecyclerView.adapter = PartyAdapter(friendList)
+
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting users", it)
+            partyRecyclerView.adapter = PartyAdapter(friendList)
+        }
+
+
+
+
 
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)
-        val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
-        val usernameDisplay = view.findViewById<TextView>(R.id.username)
+      //  val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
+     //   val usernameDisplay = view.findViewById<TextView>(R.id.username)
         val newFriendButton = view.findViewById<Button>(R.id.addFriendButton)
         val newFriendName = view.findViewById<EditText>(R.id.newCompanionEntry)
 
@@ -72,14 +116,14 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 //                return if (position % 2 == 0) 2 else 1
 //            }
 //        }
-        val layoutManagerParty = LinearLayoutManager(requireContext())
+        //val layoutManagerParty = LinearLayoutManager(requireContext())
 
         val questAdapter = DummyQuestAdapter(dummyQuestList)
-//        val partyMemberAdapter = PartyMemberAdapter(partyMemberList)
+      //  val partyMemberAdapter = PartyAdapter(friendList)
 
         questRecyclerView.layoutManager = layoutManagerQuest
         questRecyclerView.adapter = questAdapter
-//        partyRecyclerView.adapter = partyMemberAdapter
+       // partyRecyclerView.adapter = partyMemberAdapter
 
 
 
@@ -87,7 +131,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
 
-
+        //this sucks I'll make it cleaner later - josh
         newFriendButton.setOnClickListener{
             val friendName = newFriendName.text
             usersRef.child(currUser.uid).get().addOnSuccessListener { us ->
