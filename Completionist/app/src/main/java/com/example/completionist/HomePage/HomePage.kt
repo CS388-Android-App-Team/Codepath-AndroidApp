@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.completionist.Friend
 import com.example.completionist.MainActivity
 import com.example.completionist.OnNavigationItemClickListener
 import com.example.completionist.Quests.QuestViewModel
@@ -27,7 +29,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
-import com.google.firebase.firestore.auth.User
+//import com.google.firebase.firestore.auth.User
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -76,9 +78,53 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 
         val dummyQuestList = questViewModel.getQuestsByDate(formattedDate)
 
+        val friendList = mutableListOf<Friend>()
+        val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
+        val layoutManagerParty =  GridLayoutManager(requireContext(), 1)
+        val fnameDisplay = view.findViewById<TextView>(R.id.fNameTextView)
+
+        partyRecyclerView.layoutManager = layoutManagerParty
+
+        //this also sucks
+        usersRef.get().addOnSuccessListener { users ->
+            // var friendCount = users.child(currUser.uid).child("friends").childrenCount
+            fnameDisplay.text = users.child(currUser.uid).child("firstName").value.toString()
+
+             users.child(currUser.uid).child("friends").children.forEach(){ friendListEntry ->
+
+                 val friendObject = friendListEntry.key?.let { users.child(it) }
+                 if (friendListEntry.value==true) {
+                    // Log.i("firebase", "Got friend ${friendListEntry.key} entry")
+                     if (friendObject != null) {
+                         Log.i("firebase", "Got friend ${friendObject.child("username").value} object")
+                         friendList.add(
+                             Friend(
+                                 friendObject.child("idToken").value.toString(),
+                                 friendObject.child("username").value.toString(),
+                                 friendObject.child("level").value.toString().toInt(),
+                                 friendObject.child("streak").value.toString().toInt(),
+                                 friendObject.child("consistency").value.toString().toInt()
+                             )
+                         )
+                     }
+                 }
+             }
+            Log.i("firebase", "Friend list is $friendList")
+
+            partyRecyclerView.adapter = PartyAdapter(friendList)
+
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting users", it)
+            partyRecyclerView.adapter = PartyAdapter(friendList)
+        }
+
+
+
+
 
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)
-        val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
+      //  val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
+     //   val usernameDisplay = view.findViewById<TextView>(R.id.username)
         val newFriendButton = view.findViewById<Button>(R.id.addFriendButton)
         val newFriendName = view.findViewById<EditText>(R.id.newCompanionEntry)
 
@@ -88,16 +134,14 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 //                return if (position % 2 == 0) 2 else 1
 //            }
 //        }
-        val layoutManagerParty = LinearLayoutManager(requireContext())
+        //val layoutManagerParty = LinearLayoutManager(requireContext())
 
         val questAdapter = DummyQuestAdapter(dummyQuestList)
-//        val partyMemberAdapter = PartyMemberAdapter(partyMemberList)
+      //  val partyMemberAdapter = PartyAdapter(friendList)
 
         questRecyclerView.layoutManager = layoutManagerQuest
         questRecyclerView.adapter = questAdapter
-
-        //usernameDisplay.text = currUserData.username
-//        partyRecyclerView.adapter = partyMemberAdapter
+       // partyRecyclerView.adapter = partyMemberAdapter
 
 
 
@@ -111,25 +155,42 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
             usersRef.child(currUser.uid).get().addOnSuccessListener { us ->
                 usersRef.orderByChild("username").equalTo(friendName.toString()).get()
                     .addOnSuccessListener { fr ->
+                        if (fr.childrenCount > 0){
                         var it = fr.children.first()
                         val friendID = it.key.toString()
                         Log.i("firebase", "$it")
-                        if (it.child("friends").child(currUser.uid).exists()){
+                        if (it.child("friends").child(currUser.uid).exists()) {
                             //check if they sent a request to you, if yes then mark completed. if already friends, do nothing
-                            if (it.child("friends").child(currUser.uid).value == false){
-                                usersRef.child(friendID).child("friends").child(currUser.uid).setValue(true)
-                                usersRef.child(currUser.uid).child("friends").child(friendID).setValue(true)
+                            if (it.child("friends").child(currUser.uid).value == false) {
+                                usersRef.child(friendID).child("friends").child(currUser.uid)
+                                    .setValue(true)
+                                usersRef.child(currUser.uid).child("friends").child(friendID)
+                                    .setValue(true)
+                                Toast.makeText(activity, "New Companion!", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                            else{
+                                Toast.makeText(activity, "You're already companions!", Toast.LENGTH_SHORT).show()
                             }
                         }
                         //if they did not send a request to you, mark your request in your friends list
+                        else {
+                            usersRef.child(currUser.uid).child("friends").child(friendID)
+                                .setValue(false)
+                            Toast.makeText(activity, "Invite Sent!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                         else{
-                            usersRef.child(currUser.uid).child("friends").child(friendID).setValue(false)
+                            Log.e("firebase", "user $friendName may not exist")
+                            Toast.makeText(activity, "Character not created yet:(", Toast.LENGTH_SHORT).show()
                         }
                     }.addOnFailureListener{
                         //invalid username entry
-                        Log.e("firebase", "Error getting data, user $friendName may not exist", it)
+                        Log.e("firebase", "Error getting data", it)
+                        Toast.makeText(activity, "User does not exist :(", Toast.LENGTH_SHORT).show()
                     }
             }
+            newFriendName.setText("")
         }
 
         homePageNav.setOnClickListener{

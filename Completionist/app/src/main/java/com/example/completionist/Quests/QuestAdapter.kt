@@ -1,6 +1,7 @@
 package com.example.completionist.Quests
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -8,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.completionist.MainActivity
 import com.example.completionist.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,6 +37,7 @@ class QuestAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val context = parent.context
+
         return when (viewType) {
             VIEW_TYPE_QUEST -> {
                 val view = LayoutInflater.from(context)
@@ -50,10 +54,27 @@ class QuestAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is QuestViewHolder) {
+
+
             val quest = questList[position]
+            val questXp = quest.questPoints
 
             holder.complete?.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
+
+                    /*add xp to user
+                    var oldXP: Int? = MainActivity().currentUserData?.xp
+                    var moreXP: Int? = questXp
+                    Log.i("User Level", "Old XP + Completion XP: $oldXP + $moreXP}")
+                    if (oldXP != null && moreXP != null) {
+                        MainActivity().updateCurrentUser(newXp = (oldXP + moreXP))
+                        //update realtime database here = TODO()
+                        Log.i("User Level", "New XP: ${oldXP + moreXP}")
+                        Toast.makeText(MainActivity(), "You gained $moreXP XP", Toast.LENGTH_SHORT).show()
+                    }
+
+                     */
+
                     // Quest is marked as complete, remove it from the list and database
                     questList.remove(quest)
                     notifyDataSetChanged()
@@ -62,6 +83,7 @@ class QuestAdapter(
                         questDao.delete(quest)
                     }
                 }
+
             }
 
             if (!quest.isComplete) {

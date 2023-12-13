@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var recievedIntent: Intent
-    private var currentUserData: User? = null
+    var currentUserData: User? = null
 
     private lateinit var databaseFirebase: FirebaseDatabase
     private lateinit var usersRef: DatabaseReference
