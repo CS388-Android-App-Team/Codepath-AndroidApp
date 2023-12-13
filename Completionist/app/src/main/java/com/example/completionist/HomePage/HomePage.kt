@@ -1,6 +1,8 @@
 package com.example.completionist.HomePage
 
+import DummyQuestAdapter
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,21 +10,29 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.Friend
 import com.example.completionist.MainActivity
 import com.example.completionist.OnNavigationItemClickListener
+import com.example.completionist.Quests.QuestViewModel
+import com.example.completionist.Quests.QuestViewModelFactory
 import com.example.completionist.R
-import com.example.completionist.User
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
+import com.google.firebase.firestore.auth.User
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class HomePage : Fragment(R.layout.fragment_home_page) {
 
@@ -33,6 +43,9 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
     private lateinit var currUser: FirebaseUser
     //private lateinit var currUserData: User
 
+    private lateinit var questViewModel: QuestViewModel
+
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnNavigationItemClickListener) {
@@ -41,6 +54,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
             throw RuntimeException("$context must implement OnNavigationItemClickListener")
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,15 +65,18 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         firebaseAuth.currentUser?.let { us ->
             currUser = us }
 
+        questViewModel = ViewModelProvider(this, QuestViewModelFactory(requireActivity().application)).get(
+            QuestViewModel::class.java)
+        questViewModel.allQuests.observe(viewLifecycleOwner, Observer { quests ->
+            // Handle the changes in the list of quests here
+            // For example, update UI or perform actions based on changes in quests
+        })
+
        // val activity: MainActivity? = activity as MainActivity?
-        val dummyQuestList = mutableListOf<DummyQuest>()
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
-        dummyQuestList.add(DummyQuest("New QUest", false))
+
+        val formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.getDefault()))
+
+        val dummyQuestList = questViewModel.getQuestsByDate(formattedDate)
 
         val friendList = mutableListOf<Friend>()
         val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)

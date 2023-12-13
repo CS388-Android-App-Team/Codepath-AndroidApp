@@ -1,35 +1,63 @@
 package com.example.completionist
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.example.completionist.HomePage.HomePage
 import com.example.completionist.ProfiePage.ProfilePage
 import com.example.completionist.ProfiePage.SettingsPage
+import com.example.completionist.Quests.Quest
+import com.example.completionist.Quests.QuestViewModel
+import com.example.completionist.Quests.QuestViewModelFactory
 import com.example.completionist.TaskPage.TaskPage
 import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var recievedIntent: Intent
     var currentUserData: User? = null
 
-    private lateinit var database: FirebaseDatabase
+    private lateinit var databaseFirebase: FirebaseDatabase
     private lateinit var usersRef: DatabaseReference
 
-     override fun onCreate(savedInstanceState: Bundle?) {
+    private lateinit var userViewModel: UserViewModel // Initialize the UserViewModel variable
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        scheduleDailyNotification()
+//        sendBroadcast(Intent(this, NotificationReceiver::class.java))
+
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, HomePage())
@@ -43,35 +71,32 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
 
         recievedIntent = intent;
 
-         currentUserData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-             recievedIntent.getSerializableExtra("USER_DATA", User::class.java) as? User
-         } else {
-             recievedIntent.getSerializableExtra("USER_DATA") as? User
-         }
+//         currentUserData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//             recievedIntent.getSerializableExtra("USER_DATA", User::class.java) as? User
+//         } else {
+//             recievedIntent.getSerializableExtra("USER_DATA") as? User
+//         }
+//        currentUserData = userViewModel.getUserById(firebaseAuth.currentUser?.uid)
 
-         database = Firebase.database
-         usersRef = database.getReference("users")
+        currentUserData = null
+
+         databaseFirebase = Firebase.database
+         usersRef = databaseFirebase.getReference("users")
 
         Log.v("MainActivity UID", "${firebaseAuth.currentUser?.uid}, recieved value: ${recievedIntent.getStringExtra("USER_UID")}" )
-    }
+
+     }
 
     override fun onResume() {
         super.onResume()
         firebaseAuth = FirebaseAuth.getInstance()
 
-        currentUserData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            recievedIntent.getSerializableExtra("USER_DATA", User::class.java) as? User
-        } else {
-            recievedIntent.getSerializableExtra("USER_DATA") as? User
-        }
-
-        database = Firebase.database
-        usersRef = database.getReference("users")
+        databaseFirebase = Firebase.database
+        usersRef = databaseFirebase.getReference("users")
 
         if(firebaseAuth.currentUser == null){
             onSignOutClicked()
         }
-        Log.v("MainActivity UID", "${firebaseAuth.currentUser?.uid}, recieved value: ${recievedIntent.getStringExtra("USER_UID")}" )
     }
     override fun onHomeClicked() {
         Log.v("NavBar", "Home Clicked")
@@ -96,8 +121,10 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
         if (currentFragment !is ProfilePage) {
             val bundle = Bundle()
-            bundle.putSerializable("USER_DATA", currentUserData)
-            switchFragment(ProfilePage(), bundle)
+//            bundle.putSerializable("USER_DATA", currentUserData)
+//            switchFragment(ProfilePage(), bundle)
+            switchFragment(ProfilePage())
+
         }else{
             Log.v("NavBar", "Already Profile")
         }
@@ -105,6 +132,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
     override fun onSignOutClicked() {
         Log.v("NavBar", "Sign In Clicked")
         firebaseAuth.signOut()
+        userViewModel.deleteAllUsers()
         val intent = Intent(this, SplashScreen::class.java)
         startActivity(intent)
     }
@@ -114,8 +142,10 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
         if (currentFragment !is SettingsPage) {
             val bundle = Bundle()
-            bundle.putSerializable("USER_DATA", currentUserData)
-            switchFragment(SettingsPage(), bundle)
+//            bundle.putSerializable("USER_DATA", currentUserData)
+//            switchFragment(SettingsPage(), bundle)
+            switchFragment(SettingsPage())
+
         }else{
             Log.v("NavBar", "Already Settings")
         }
@@ -133,7 +163,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
                         val userData = hashMapOf<String, Any>("email" to email)
                         usersRef.child(userId).updateChildren(userData).addOnSuccessListener {
                             Toast.makeText(this, "Verification email sent", Toast.LENGTH_SHORT).show()
-                            updateCurrentUser(newEmail = email)
+                            userViewModel.updateEmailById(userId, email)
                         }.addOnFailureListener{
                             Toast.makeText(this, "Failed to change email", Toast.LENGTH_SHORT).show()
                         }
@@ -159,13 +189,9 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
                 )
                 usersRef.child(userId).updateChildren(userData)
                     .addOnSuccessListener {
-                        // Update local currentUserData
-                        currentUserData?.apply {
-                            firstName = fName
-                            lastName = lName
-                            username = uName
-                        }
-
+                        userViewModel.updateFirstNameById(userId, fName)
+                        userViewModel.updateLastNameById(userId, lName)
+                        userViewModel.updateUsernameById(userId, uName)
                         // Notify the user about the successful update
                         Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show()
                     }
@@ -214,6 +240,10 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         }
     }
 
+    override fun onReminderSaveClick() {
+        scheduleDailyNotification()
+    }
+
 
     private fun switchFragment(fragment: Fragment, data: Bundle? = null){
         val transaction = supportFragmentManager.beginTransaction()
@@ -250,29 +280,48 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         return passwordPattern.matches(password)
     }
 
-    fun updateCurrentUser(
-        newUsername: String? = null,
-        newEmail: String? = null,
-        newFirstName: String? = null,
-        newLastName: String? = null,
-        newLevel: Int? = null,
-        newXp: Int? = null,
-        newStreak: Int? = null,
-        newConsistency: Int? = null,
-        newFriendCount: Int? = null
-    ) {
-        currentUserData?.apply {
-            newUsername?.let { username = it }
-            newEmail?.let { email = it }
-            newFirstName?.let { firstName = it }
-            newLastName?.let { lastName = it }
-            newLevel?.let { level = it }
-            newXp?.let { xp = it }
-            newStreak?.let { streak = it }
-            newConsistency?.let { consistency = it }
-            newFriendCount?.let { friendCount = it }
-        }
+    fun scheduleDailyNotification() {
+        val currentTime = Calendar.getInstance()
+        val initialDelay = calculateInitialDelay(currentTime)
+
+        val notificationWorkRequest =
+            PeriodicWorkRequest.Builder(NotificationWorker::class.java, 24, TimeUnit.HOURS)
+                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .build()
+
+        WorkManager.getInstance(this).enqueue(notificationWorkRequest)
     }
+
+    private fun calculateInitialDelay(currentTime: Calendar): Long {
+        val sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        val savedNotificationTime = getNotificationTime(this)
+        val savedHour = savedNotificationTime.first
+        val savedMinute = savedNotificationTime.second
+
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, savedHour) // Set the hour to 3 AM
+            set(Calendar.MINUTE, savedMinute)
+            set(Calendar.SECOND, 0)
+
+            // Check if the current time is after 3 AM, if so, set for the next day
+            if (before(currentTime) || equals(currentTime)) {
+                add(Calendar.DAY_OF_MONTH, 1)
+            }
+        }
+
+        return calendar.timeInMillis - currentTime.timeInMillis
+    }
+
+    // Retrieve notification time from SharedPreferences
+    fun getNotificationTime(context: Context): Pair<Int, Int> {
+        val sharedPrefs = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        val hourOfDay = sharedPrefs?.getInt("notification_hour", -1) ?: 12
+        val minute = sharedPrefs?.getInt("notification_minute", -1) ?: 0
+        return Pair(hourOfDay, minute)
+    }
+
+
 
 
 }

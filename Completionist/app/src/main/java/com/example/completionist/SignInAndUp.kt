@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.completionist.signinandup.ForgotPassword
 import com.example.completionist.signinandup.SignIn
 import com.example.completionist.signinandup.SignUp
@@ -23,6 +24,8 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
     private lateinit var usersRef: DatabaseReference
 
     public lateinit var currentUserData: User
+    private lateinit var userViewModel: UserViewModel // Initialize the UserViewModel variable
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +38,8 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
         Log.v("firebase instance sign in", "${firebaseAuth.currentUser?.uid}")
         database = Firebase.database
         usersRef = database.getReference("users")
+
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
     }
 
 
@@ -52,9 +57,10 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
                         if(user!=null){
                             val userData = User(user.idToken, user.username, user.email, user.firstName, user.lastName, user.level, user.xp, user.streak, user.consistency, user.friendCount)
 
+                            userViewModel.insertUser(userData)
                             val intent = Intent(this, MainActivity::class.java)
                             intent.putExtra("USER_UID", userId)
-                            intent.putExtra("USER_DATA", userData)
+//                            intent.putExtra("USER_DATA", userData)
                             startActivity(intent)
                         }else{
                             Log.e("User Info", "Failed to fetch data")
@@ -168,6 +174,7 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
         val user = User(currUser.uid, uName, newEmail, fName, lName,0, 0, 0, 0, 0)
         usersRef.child(currUser.uid).setValue(user)
         usersRef.child(currUser.uid).child("friends").child("testUID").setValue(false)
+        userViewModel.insertUser(user)
     }
     fun getUserInfo(uid: String, callback: (User?) -> Unit) {
         usersRef.child(uid).get().addOnSuccessListener { dataSnapshot ->
