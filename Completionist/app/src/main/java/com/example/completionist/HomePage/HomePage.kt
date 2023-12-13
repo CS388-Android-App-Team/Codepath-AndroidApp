@@ -29,7 +29,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
-import com.google.firebase.firestore.auth.User
+//import com.google.firebase.firestore.auth.User
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
