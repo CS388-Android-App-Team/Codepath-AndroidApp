@@ -89,8 +89,6 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         }
     }
 
-
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnNavigationItemClickListener) {
@@ -153,15 +151,13 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val questRecyclerView = view.findViewById<RecyclerView>(R.id.quests_recycler_view)
+        val questRecyclerView = view.findViewById<RecyclerView>(R.id.ongoing_quests_recycler_view)
 
         val layoutManagerQuest = GridLayoutManager(requireContext(), 2)
 
         questRecyclerView.layoutManager = layoutManagerQuest
         questRecyclerView.adapter = questAdapter
 
-        // Add some temporary quests for testing
-        addTempQuests()
 
         val addNewQuestButton = view.findViewById<ImageView>(R.id.add_new_quest_button_task)
 
@@ -171,6 +167,8 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
         // Set initial date
         updateDateText()
+
+        addTempQuests()
 
         // Handle arrow clicks
         changeDateArrowRight.setOnClickListener {

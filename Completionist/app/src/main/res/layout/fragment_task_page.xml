@@ -9,6 +9,54 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
+        android:id="@+id/complete_button"
+        android:layout_width="142dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="134dp"
+        android:layout_marginEnd="135dp"
+        app:layout_constraintBottom_toTopOf="@+id/include"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completed_quests_recycler_view"
+        app:srcCompat="@drawable/rectangle_green" />
+
+    <TextView
+        android:id="@+id/complete_button_text"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:text="Complete"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/complete_button"
+        app:layout_constraintEnd_toEndOf="@id/complete_button"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="@id/complete_button"
+        app:layout_constraintTop_toTopOf="@id/complete_button"
+        app:layout_constraintVertical_bias="0.464" />
+
+    <TextView
+        android:id="@+id/ongoing_quests_text"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/michroma"
+        android:text="Ongoing Quests"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_date_arrow_backward" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/completed_quests_recycler_view"
+        android:layout_width="409dp"
+        android:layout_height="140dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completed_quests_text" />
+
+    <ImageView
         android:id="@+id/change_date_arrow_forward"
         android:layout_width="34dp"
         android:layout_height="42dp"
@@ -24,14 +72,13 @@
 
     <ImageView
         android:id="@+id/add_new_quest_button_task"
-        android:layout_width="26dp"
-        android:layout_height="29dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginBottom="50dp"
+        android:layout_width="31dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="52dp"
         app:layout_constraintBottom_toTopOf="@+id/change_date_arrow_forward"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/accept_new_quest_text"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/add_button" />
@@ -105,24 +152,34 @@
         android:layout_width="34dp"
         android:layout_height="42dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="52dp"
         android:layout_marginEnd="35dp"
         android:src="@drawable/date_change_arrow"
         app:layout_constraintEnd_toStartOf="@+id/selected_date_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo2" />
+        app:layout_constraintTop_toBottomOf="@id/accept_new_quest_text" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/quests_recycler_view"
-        android:layout_width="409dp"
-        android:layout_height="404dp"
+        android:id="@+id/ongoing_quests_recycler_view"
+        android:layout_width="408dp"
+        android:layout_height="140dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/include"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/change_date_arrow_forward" />
+        app:layout_constraintTop_toBottomOf="@+id/ongoing_quests_text" />
+
+    <TextView
+        android:id="@+id/completed_quests_text"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/michroma"
+        android:text="Completed Quests"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ongoing_quests_recycler_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
