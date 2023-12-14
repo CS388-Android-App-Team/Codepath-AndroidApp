@@ -60,4 +60,22 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun updateLevelById(idToken: String, newLevel: Int){
+        viewModelScope.launch {
+            repository.updateLevelById(idToken, newLevel)
+        }
+    }
+
+    fun addXpById(idToken: String, xpToAdd: Int){
+        viewModelScope.launch {
+            repository.addXpById(idToken, xpToAdd)
+        }
+    }
+
+    fun addToFriendCountById(idToken: String){
+        viewModelScope.launch {
+            repository.addToFriendCountById(idToken)
+        }
+    }
+
 }

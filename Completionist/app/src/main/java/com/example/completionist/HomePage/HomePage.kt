@@ -1,6 +1,5 @@
 package com.example.completionist.HomePage
 
-import DummyQuestAdapter
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -12,17 +11,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.Friend
-import com.example.completionist.MainActivity
 import com.example.completionist.OnNavigationItemClickListener
+import com.example.completionist.Quests.QuestAdapter
+import com.example.completionist.Quests.QuestDatabase
 import com.example.completionist.Quests.QuestViewModel
 import com.example.completionist.Quests.QuestViewModelFactory
 import com.example.completionist.R
+import com.example.completionist.UserViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -41,42 +40,64 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
     private lateinit var usersRef: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var currUser: FirebaseUser
-    //private lateinit var currUserData: User
+    private lateinit var userViewModel: UserViewModel // Initialize the UserViewModel variable
 
+    private lateinit var questAdapter: QuestAdapter
     private lateinit var questViewModel: QuestViewModel
 
+    private fun getCurrentUserId(): String {
+        // Assuming you have the Firebase user
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        return firebaseUser?.uid ?: ""
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnNavigationItemClickListener) {
             listener = context
+            val questDatabase = QuestDatabase.getDatabase(requireContext())
+            val questDao = questDatabase.questDao()
+
+            // Get the current user ID
+            val currentUserId = getCurrentUserId()
+
+            // Pass the user ID to the QuestViewModel
+            questViewModel = ViewModelProvider(
+                this,
+                QuestViewModelFactory(requireActivity().application, currentUserId)
+            ).get(QuestViewModel::class.java)
+
+            questAdapter = QuestAdapter(mutableListOf(), context, questDao, currentUserId)
         } else {
             throw RuntimeException("$context must implement OnNavigationItemClickListener")
+        }
+    }
+
+    private fun updateQuests() {
+        val questViewModel = ViewModelProvider(this).get(QuestViewModel::class.java)
+
+        questViewModel.getSortedQuestsForCurrentUser().observe(viewLifecycleOwner) { quests ->
+            // Filter out completed quests
+            val ongoingQuests = quests.filter { !it.isComplete }
+
+            // Update the adapter with the ongoing quests
+            questAdapter.updateQuests(ongoingQuests)
         }
     }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         database = Firebase.database
         usersRef = database.getReference("users")
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseAuth.currentUser?.let { us ->
             currUser = us }
-
-        questViewModel = ViewModelProvider(this, QuestViewModelFactory(requireActivity().application)).get(
-            QuestViewModel::class.java)
-        questViewModel.allQuests.observe(viewLifecycleOwner, Observer { quests ->
-            // Handle the changes in the list of quests here
-            // For example, update UI or perform actions based on changes in quests
-        })
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
        // val activity: MainActivity? = activity as MainActivity?
 
         val formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.getDefault()))
-
-        val dummyQuestList = questViewModel.getQuestsByDate(formattedDate)
 
         val friendList = mutableListOf<Friend>()
         val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
@@ -118,10 +139,6 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
             partyRecyclerView.adapter = PartyAdapter(friendList)
         }
 
-
-
-
-
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)
       //  val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
      //   val usernameDisplay = view.findViewById<TextView>(R.id.username)
@@ -136,7 +153,6 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 //        }
         //val layoutManagerParty = LinearLayoutManager(requireContext())
 
-        val questAdapter = DummyQuestAdapter(dummyQuestList)
       //  val partyMemberAdapter = PartyAdapter(friendList)
 
         questRecyclerView.layoutManager = layoutManagerQuest
@@ -149,7 +165,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
 
-
+        //friend request stuff
         newFriendButton.setOnClickListener{
             val friendName = newFriendName.text
             usersRef.child(currUser.uid).get().addOnSuccessListener { us ->
@@ -162,10 +178,20 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
                         if (it.child("friends").child(currUser.uid).exists()) {
                             //check if they sent a request to you, if yes then mark completed. if already friends, do nothing
                             if (it.child("friends").child(currUser.uid).value == false) {
+                                //become friends
                                 usersRef.child(friendID).child("friends").child(currUser.uid)
                                     .setValue(true)
                                 usersRef.child(currUser.uid).child("friends").child(friendID)
                                     .setValue(true)
+                                //increment friend count
+                                usersRef.child(friendID).child("friendCount")
+                                    .setValue(it.child("friendCount").value.toString().toInt()+1)
+                                userViewModel.addToFriendCountById(friendID)
+
+                                usersRef.child(currUser.uid).child("friendCount")
+                                    .setValue(us.child("friendCount").value.toString().toInt()+1)
+                                userViewModel.addToFriendCountById(currUser.uid)
+
                                 Toast.makeText(activity, "New Companion!", Toast.LENGTH_SHORT)
                                     .show()
                             }
@@ -202,6 +228,9 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         profilePageNav.setOnClickListener{
             listener?.onProfileClicked()
         }
+
+        // Add a method to update quests when the fragment is created
+        updateQuests()
 
     }
 }

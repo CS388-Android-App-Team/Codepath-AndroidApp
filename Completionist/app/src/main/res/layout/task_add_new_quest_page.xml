@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/task_add_new_quest_page"
@@ -20,7 +21,7 @@
         android:id="@+id/quest_date"
         android:layout_width="254dp"
         android:layout_height="51dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="36dp"
         android:ems="10"
         android:hint="Quest Date (ex: 12/11/2023)"
@@ -56,7 +57,7 @@
         android:id="@+id/quest_name"
         android:layout_width="254dp"
         android:layout_height="51dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="92dp"
         android:ems="10"
         android:hint="Quest Name"
@@ -64,15 +65,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo3" />
 
+    <TextView
+        android:id="@+id/char_count_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="8dp"
+        android:text="Characters left: 16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quest_name" />
+
     <EditText
         android:id="@+id/XP_amount"
-        android:layout_width="75dp"
+        android:layout_width="80dp"
         android:layout_height="50dp"
-        android:layout_marginStart="26dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="175dp"
+        android:layout_marginEnd="15dp"
         android:ems="10"
         android:hint="XP (1-10)"
         android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/quest_name"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -94,7 +107,6 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/decline_button"
         app:layout_constraintEnd_toEndOf="@+id/decline_button"
-        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="@+id/decline_button"
         app:layout_constraintTop_toTopOf="@+id/decline_button"
         app:layout_constraintVertical_bias="0.47" />
@@ -107,7 +119,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/accept_button"
         app:layout_constraintEnd_toEndOf="@+id/accept_button"
-        app:layout_constraintHorizontal_bias="0.662"
+        app:layout_constraintHorizontal_bias="0.623"
         app:layout_constraintStart_toStartOf="@+id/accept_button"
         app:layout_constraintTop_toTopOf="@+id/accept_button"
         app:layout_constraintVertical_bias="0.47" />

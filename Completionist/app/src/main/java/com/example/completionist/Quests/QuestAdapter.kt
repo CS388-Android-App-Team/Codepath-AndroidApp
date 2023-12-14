@@ -1,7 +1,6 @@
 package com.example.completionist.Quests
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -9,9 +8,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.completionist.MainActivity
 import com.example.completionist.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -19,7 +16,8 @@ import kotlinx.coroutines.launch
 class QuestAdapter(
     private val questList: MutableList<Quest>,
     private val context: Context,
-    private val questDao: QuestDao
+    private val questDao: QuestDao,
+    private val userId: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_QUEST = 1
@@ -54,58 +52,63 @@ class QuestAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is QuestViewHolder) {
-
-
             val quest = questList[position]
-            val questXp = quest.questPoints
 
-            holder.complete?.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
+            // Only bind the quest if it belongs to the current user
+            if (quest.userId == userId) {
 
-                    /*add xp to user
-                    var oldXP: Int? = MainActivity().currentUserData?.xp
-                    var moreXP: Int? = questXp
-                    Log.i("User Level", "Old XP + Completion XP: $oldXP + $moreXP}")
-                    if (oldXP != null && moreXP != null) {
-                        MainActivity().updateCurrentUser(newXp = (oldXP + moreXP))
-                        //update realtime database here = TODO()
-                        Log.i("User Level", "New XP: ${oldXP + moreXP}")
-                        Toast.makeText(MainActivity(), "You gained $moreXP XP", Toast.LENGTH_SHORT).show()
-                    }
+                // Set up more options click listener
+                holder.moreOptions.setOnClickListener { showPopupMenu(holder.moreOptions, quest) }
 
-                     */
+                // Remove the previous listener to avoid conflicts
+                holder.complete?.setOnCheckedChangeListener(null)
 
-                    // Quest is marked as complete, remove it from the list and database
-                    questList.remove(quest)
-                    notifyDataSetChanged()
-                    // Delete from the database
-                    GlobalScope.launch {
-                        questDao.delete(quest)
+                // Set the checked state without triggering the listener
+                holder.complete?.isChecked = quest.isComplete
+
+                // Disable the checkbox if the quest is complete
+                holder.complete?.isEnabled = !quest.isComplete
+
+                // Set up the new listener
+                holder.complete?.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        if (!quest.isComplete) {
+                            // Mark the quest as complete
+                            quest.isComplete = true
+                        } else {
+                            // If the quest is already complete, prevent unchecking
+                            holder.complete?.isChecked = true
+                        }
                     }
                 }
 
-            }
-
-            if (!quest.isComplete) {
                 // Display the quest details as usual
                 holder.questName?.text = quest.questName
                 holder.questPoints?.text = "+" + quest.questPoints.toString()
                 holder.questDate?.text = quest.questDate.toString()
-                holder.complete?.isChecked = quest.isComplete
-
-                // Set up more options click listener
-                holder.moreOptions.setOnClickListener { showPopupMenu(holder.moreOptions, quest) }
-            } else {
-                // Hide or handle completed quests as needed
-                holder.itemView.visibility = View.GONE
             }
         }
     }
 
     fun updateQuests(newQuests: List<Quest?>) {
         questList.clear()
-        questList.addAll(newQuests.filterNotNull())
+        questList.addAll(newQuests.filterNotNull().filter { it.userId == userId })
         notifyDataSetChanged()
+    }
+
+    // Add these methods
+    fun removeQuest(quest: Quest) {
+        questList.remove(quest)
+        notifyDataSetChanged()
+    }
+
+    fun addQuest(quest: Quest) {
+        questList.add(quest)
+        notifyDataSetChanged()
+    }
+
+    fun getAllQuests(): List<Quest> {
+        return questList.toList() // Returns a copy of the questList
     }
 
     override fun getItemCount(): Int {

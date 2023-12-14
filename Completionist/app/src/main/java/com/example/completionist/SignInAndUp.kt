@@ -45,31 +45,47 @@ class SignInAndUp : AppCompatActivity(), SignInAndUpClickListener {
 
     override fun onSignInClick(email: String, password: String) {
 //        Toast.makeText(this, "${email}, ${password}", Toast.LENGTH_SHORT).show()
-        if(isValidEmail(email)){
+        if(isValidEmail(email)) {
+            if (isValidPassword(password)){
+            //new check if password is valid
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                if(it.isSuccessful){
+                if (it.isSuccessful) {
                     val currentUser = firebaseAuth.currentUser
                     val userId = currentUser?.uid ?: ""
                     Log.v("Sign In and Up", "$currentUser, $userId")
 
 //                    Get current user information from realtime DB
-                    getUserInfo(userId){user ->
-                        if(user!=null){
-                            val userData = User(user.idToken, user.username, user.email, user.firstName, user.lastName, user.level, user.xp, user.streak, user.consistency, user.friendCount)
+                    getUserInfo(userId) { user ->
+                        if (user != null) {
+                            val userData = User(
+                                user.idToken,
+                                user.username,
+                                user.email,
+                                user.firstName,
+                                user.lastName,
+                                user.level,
+                                user.xp,
+                                user.streak,
+                                user.consistency,
+                                user.friendCount
+                            )
 
                             userViewModel.insertUser(userData)
                             val intent = Intent(this, MainActivity::class.java)
                             intent.putExtra("USER_UID", userId)
 //                            intent.putExtra("USER_DATA", userData)
                             startActivity(intent)
-                        }else{
+                        } else {
                             Log.e("User Info", "Failed to fetch data")
                         }
                     }
 
-                }else{
+                } else {
                     Toast.makeText(this, "Failed to sign in", Toast.LENGTH_SHORT).show()
                 }
+            }
+        } else{
+            Toast.makeText(this, "Not Valid password", Toast.LENGTH_SHORT).show()
             }
         }else{
             Toast.makeText(this, "Not Valid email", Toast.LENGTH_SHORT).show()
