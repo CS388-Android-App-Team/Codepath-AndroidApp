@@ -60,4 +60,16 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    suspend fun updateLevelById(idToken: String, newLevel: Int){
+        viewModelScope.launch {
+            repository.updateLevelById(idToken, newLevel)
+        }
+    }
+
+    suspend fun updateXpById(idToken: String, xpToAdd: Int){
+        viewModelScope.launch {
+            repository.updateXpById(idToken, xpToAdd)
+        }
+    }
+
 }

@@ -38,4 +38,12 @@ class UserRepository(private val userDao: UserDao) {
         userDao.updateUsernameById(idToken, username)
     }
 
+    suspend fun updateLevelById(idToken: String, newLevel: Int){
+        userDao.updateLevelById(idToken, newLevel)
+    }
+
+    suspend fun updateXpById(idToken: String, xpToAdd: Int){
+        userDao.updateXpById(idToken, xpToAdd)
+    }
+
 }

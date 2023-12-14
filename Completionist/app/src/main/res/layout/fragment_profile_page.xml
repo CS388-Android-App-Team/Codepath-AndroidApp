@@ -115,8 +115,8 @@
 
     <TextView
         android:id="@+id/xp_progress_textview"
-        android:layout_width="70dp"
-        android:layout_height="41dp"
+        android:layout_width="82dp"
+        android:layout_height="33dp"
         android:layout_marginTop="72dp"
         android:fontFamily="@font/michroma"
         android:text="50/100 XP to Level Up"

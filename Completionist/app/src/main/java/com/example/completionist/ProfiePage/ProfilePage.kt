@@ -60,6 +60,7 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         val userName = view.findViewById<TextView>(R.id.username_profilepage)
         val userImage = view.findViewById<ImageView>(R.id.userImage_profilepage)
         val userPoints = view.findViewById<TextView>(R.id.points_profilepage)
+        val userXP = view.findViewById<TextView>(R.id.xp_progress_textview)
         val userPartySize = view.findViewById<TextView>(R.id.partysize_profilepage)
 
 
@@ -69,6 +70,7 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         userViewModel.getUserById(uid).observe(viewLifecycleOwner){user ->
             userName.text = user?.username
             userPoints.text = "Level ${user?.level.toString()}"
+            userXP.text = "${user?.xp.toString()}/100 XP to Level Up"
             userPartySize.text = "${user?.friendCount.toString()} Party Members"
         }
 
