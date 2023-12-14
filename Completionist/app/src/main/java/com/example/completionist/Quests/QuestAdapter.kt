@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.completionist.MainActivity
 import com.example.completionist.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

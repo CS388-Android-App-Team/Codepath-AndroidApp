@@ -11,7 +11,6 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.completionist.R
@@ -40,12 +39,19 @@ class AddNewTaskPage : AppCompatActivity() {
         questName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val maxLength = 16
+                if (s?.length ?: 0 > maxLength) {
+                    // If the entered text exceeds the maximum length, truncate it
+                    questName.setText(s?.subSequence(0, maxLength))
+                    questName.setSelection(maxLength) // Move the cursor to the end
+                }
 
-            override fun afterTextChanged(s: Editable?) {
-                val remainingChars = 16 - s?.length!! ?: 0
-                charCountTextView.text = "Characters left: $remainingChars"
+                val remainingChars = maxLength - (s?.length ?: 0)
+                charCountTextView.text = "Characters left: ${maxOf(0, remainingChars)}"
             }
+
+            override fun afterTextChanged(s: Editable?) {}
         })
 
         acceptButton.setOnClickListener {
@@ -54,12 +60,6 @@ class AddNewTaskPage : AppCompatActivity() {
             // Check if questName is empty
             if (questNameText.isEmpty()) {
                 showCustomToast(this, "Please enter a Quest Name")
-                return@setOnClickListener
-            }
-
-            // Check questName length
-            if (questNameText.length > 16) {
-                showCustomToast(this, "Quest name must be 16 characters or less")
                 return@setOnClickListener
             }
 
