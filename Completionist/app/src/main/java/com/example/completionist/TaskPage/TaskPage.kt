@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -44,6 +46,9 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
     private lateinit var ongoingQuestAdapter: QuestAdapter
     private lateinit var completedQuestAdapter: QuestAdapter
     private lateinit var questViewModel: QuestViewModel
+
+    private var aggregateXp: Int = 0
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addNewQuest(
@@ -88,6 +93,8 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
                 ongoingQuestAdapter.updateQuests(ongoingQuests)
                 completedQuestAdapter.updateQuests(completedQuests)
+
+
             }
         }
     }
@@ -151,6 +158,12 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
     private fun completeQuest(quest: Quest) {
         quest.isComplete = true
+        //xp gain
+        if(quest.questPoints!=null){
+            Log.i("Leveling", "task to add ${quest.questName} for ${quest.questPoints} points")
+            aggregateXp += quest.questPoints
+            Log.i("Leveling", "Aggregate Xp = $aggregateXp")
+        }
         lifecycleScope.launch {
             val questDatabase = QuestDatabase.getDatabase(requireContext())
             val questDao = questDatabase.questDao()
@@ -197,10 +210,15 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         completeButton.setOnClickListener {
             // For demonstration purposes, let's assume you want to complete the first ongoing quest
             ongoingQuestAdapter.getAllQuests().firstOrNull()?.let { firstOngoingQuest ->
+
                 completeQuest(firstOngoingQuest)
                 // Update the adapters after completing the quest
                 updateQuestsAdapter()
             }
+            //TODO = () xp into online and room db
+            Log.i("Leveling", " Listener Aggregate Xp = $aggregateXp")
+            listener?.onQuestCompleteClick(aggregateXp)
+            aggregateXp=0
         }
 
         // Handle arrow clicks

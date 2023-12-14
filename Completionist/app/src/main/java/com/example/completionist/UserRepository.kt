@@ -42,8 +42,8 @@ class UserRepository(private val userDao: UserDao) {
         userDao.updateLevelById(idToken, newLevel)
     }
 
-    suspend fun updateXpById(idToken: String, xpToAdd: Int){
-        userDao.updateXpById(idToken, xpToAdd)
+    suspend fun addXpById(idToken: String, xpToAdd: Int){
+        userDao.addXpById(idToken, xpToAdd)
     }
 
 }

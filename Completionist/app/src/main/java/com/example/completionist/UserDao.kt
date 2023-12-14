@@ -40,5 +40,5 @@ interface UserDao {
     suspend fun updateLevelById(idToken: String, newLevel: Int)
 
     @Query("UPDATE user SET xp = (xp + :xpToAdd ) WHERE idToken = :idToken")
-    suspend fun updateXpById(idToken: String, xpToAdd: Int)
+    suspend fun addXpById(idToken: String, xpToAdd: Int)
 }

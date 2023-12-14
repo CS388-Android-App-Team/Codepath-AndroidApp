@@ -58,7 +58,6 @@ class QuestAdapter(
 
             // Only bind the quest if it belongs to the current user
             if (quest.userId == userId) {
-                val questXp = quest.questPoints
 
                 // Set up more options click listener
                 holder.moreOptions.setOnClickListener { showPopupMenu(holder.moreOptions, quest) }
@@ -69,23 +68,6 @@ class QuestAdapter(
                 // Set the checked state without triggering the listener
                 holder.complete?.isChecked = quest.isComplete
 
-                // Set up the new listener
-                holder.complete?.setOnCheckedChangeListener { _, isChecked ->
-                    if (isChecked) {
-                        /*add xp to user
-                   var oldXP: Int? = MainActivity().currentUserData?.xp
-                   var moreXP: Int? = questXp
-                   Log.i("User Level", "Old XP + Completion XP: $oldXP + $moreXP}")
-                   if (oldXP != null && moreXP != null) {
-                       MainActivity().updateCurrentUser(newXp = (oldXP + moreXP))
-                       //update realtime database here = TODO()
-                       Log.i("User Level", "New XP: ${oldXP + moreXP}")
-                       Toast.makeText(MainActivity(), "You gained $moreXP XP", Toast.LENGTH_SHORT).show()
-                   }
-
-                    */
-                    }
-                }
 
                 // Display the quest details as usual
                 holder.questName?.text = quest.questName

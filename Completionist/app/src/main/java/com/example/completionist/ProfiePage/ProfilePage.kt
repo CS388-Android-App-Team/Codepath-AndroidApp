@@ -70,7 +70,7 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         userViewModel.getUserById(uid).observe(viewLifecycleOwner){user ->
             userName.text = user?.username
             userPoints.text = "Level ${user?.level.toString()}"
-            userXP.text = "${user?.xp.toString()}/100 XP to Level Up"
+            userXP.text = "${(user?.xp?.rem(100)).toString()}/100 XP to Level Up"
             userPartySize.text = "${user?.friendCount.toString()} Party Members"
         }
 

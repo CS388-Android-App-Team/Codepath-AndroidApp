@@ -243,6 +243,46 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         scheduleDailyNotification()
     }
 
+    override fun onQuestCompleteClick(aggXp: Int){
+        val user = firebaseAuth.currentUser
+        val userId = user?.uid ?: ""
+        usersRef.child(userId).get()
+            .addOnSuccessListener {
+                Log.i("Leveling", "Current User $userId")
+                var currXp = it.child("xp").value.toString().toInt()
+                var currLevel = it.child("level").value.toString().toInt()
+                Log.i("Leveling", "Current Level $currLevel")
+                var nXp = currXp + aggXp
+                Log.i("Leveling", "New XP Total $nXp")
+                var nLevel = nXp/100
+                Log.i("Leveling", "New Level $nLevel")
+                //level up process
+
+                val userData = hashMapOf<String, Any?>(
+                    "xp" to nXp,
+                    "level" to nLevel
+                )
+                usersRef.child(userId).updateChildren(userData)
+                    .addOnSuccessListener {
+                        userViewModel.addXpById(userId, aggXp)
+                        if (nLevel != null) {
+                            userViewModel.updateLevelById(userId, nLevel)
+                        }
+
+                        // Notify the user about the successful gain
+                        Toast.makeText(this, "You gained $aggXp xp", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        // Notify the user about the failure
+                        Toast.makeText(this, "Failed to add Xp", Toast.LENGTH_SHORT).show()
+                        Log.e("Leveling", "Failed to add Xp to realtimeDB", it)
+                    }
+            }.addOnFailureListener(){
+                Log.e("Firebase", "Failed to retrieve user", it)
+            }
+
+    }
+
 
     private fun switchFragment(fragment: Fragment, data: Bundle? = null){
         val transaction = supportFragmentManager.beginTransaction()
