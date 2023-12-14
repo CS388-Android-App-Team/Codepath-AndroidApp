@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.Friend
 import com.example.completionist.MainActivity
 import com.example.completionist.OnNavigationItemClickListener
+import com.example.completionist.Quests.QuestAdapter
+import com.example.completionist.Quests.QuestDatabase
 import com.example.completionist.Quests.QuestViewModel
 import com.example.completionist.Quests.QuestViewModelFactory
 import com.example.completionist.R
@@ -43,6 +45,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
     private lateinit var currUser: FirebaseUser
     //private lateinit var currUserData: User
 
+    private lateinit var questAdapter: QuestAdapter
     private lateinit var questViewModel: QuestViewModel
 
 
@@ -50,8 +53,23 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         super.onAttach(context)
         if (context is OnNavigationItemClickListener) {
             listener = context
+            val questDatabase = QuestDatabase.getDatabase(requireContext())
+            val questDao = questDatabase.questDao()
+            questAdapter = QuestAdapter(mutableListOf(), requireContext(), questDao, true)
+            questViewModel =
+                ViewModelProvider(this, QuestViewModelFactory(requireActivity().application))
+                    .get(QuestViewModel::class.java)
         } else {
             throw RuntimeException("$context must implement OnNavigationItemClickListener")
+        }
+    }
+
+    private fun updateQuests() {
+        val questViewModel = ViewModelProvider(this).get(QuestViewModel::class.java)
+
+        questViewModel.getSortedQuests().observe(viewLifecycleOwner) { quests ->
+            // Update the adapter with the latest quests
+            questAdapter.updateQuests(quests)
         }
     }
     @RequiresApi(Build.VERSION_CODES.O)
@@ -64,13 +82,6 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseAuth.currentUser?.let { us ->
             currUser = us }
-
-        questViewModel = ViewModelProvider(this, QuestViewModelFactory(requireActivity().application)).get(
-            QuestViewModel::class.java)
-        questViewModel.allQuests.observe(viewLifecycleOwner, Observer { quests ->
-            // Handle the changes in the list of quests here
-            // For example, update UI or perform actions based on changes in quests
-        })
 
        // val activity: MainActivity? = activity as MainActivity?
 
@@ -136,7 +147,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 //        }
         //val layoutManagerParty = LinearLayoutManager(requireContext())
 
-        val questAdapter = DummyQuestAdapter(dummyQuestList)
+        val questAdapter = QuestAdapter(questList)
       //  val partyMemberAdapter = PartyAdapter(friendList)
 
         questRecyclerView.layoutManager = layoutManagerQuest
