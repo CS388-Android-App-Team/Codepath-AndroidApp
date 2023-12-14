@@ -69,11 +69,14 @@ class QuestAdapter(
                 // Set the checked state without triggering the listener
                 holder.complete?.isChecked = quest.isComplete
 
+                // Disable the checkbox if the quest is complete
+                holder.complete?.isEnabled = !quest.isComplete
+
                 // Set up the new listener
                 holder.complete?.setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {
-                        quest.isComplete = true
-                        /*add xp to user
+                        if (!quest.isComplete) {
+                            /*add xp to user
                    var oldXP: Int? = MainActivity().currentUserData?.xp
                    var moreXP: Int? = questXp
                    Log.i("User Level", "Old XP + Completion XP: $oldXP + $moreXP}")
@@ -85,6 +88,13 @@ class QuestAdapter(
                    }
 
                     */
+
+                            // Mark the quest as complete
+                            quest.isComplete = true
+                        } else {
+                            // If the quest is already complete, prevent unchecking
+                            holder.complete?.isChecked = true
+                        }
                     }
                 }
 
