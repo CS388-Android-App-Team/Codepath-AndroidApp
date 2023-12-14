@@ -75,7 +75,7 @@ class ProfilePage : Fragment(R.layout.fragment_profile_page) {
         questViewModel =
             ViewModelProvider(this, QuestViewModelFactory(this.requireActivity().application, uid))[QuestViewModel::class.java]
 
-        questViewModel.allQuests.observe(viewLifecycleOwner){quests ->
+        questViewModel.getSortedQuestsForCurrentUser().observe(viewLifecycleOwner){quests ->
             var completedQuests = 0
             var totalQuests = 0
             for (quest in quests){
