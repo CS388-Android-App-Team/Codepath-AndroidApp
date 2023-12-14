@@ -46,4 +46,8 @@ class UserRepository(private val userDao: UserDao) {
         userDao.addXpById(idToken, xpToAdd)
     }
 
+    suspend fun addToFriendCountById(idToken: String){
+        userDao.addToFriendCountById(idToken)
+    }
+
 }

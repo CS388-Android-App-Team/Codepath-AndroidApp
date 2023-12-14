@@ -72,4 +72,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun addToFriendCountById(idToken: String){
+        viewModelScope.launch {
+            repository.addToFriendCountById(idToken)
+        }
+    }
+
 }

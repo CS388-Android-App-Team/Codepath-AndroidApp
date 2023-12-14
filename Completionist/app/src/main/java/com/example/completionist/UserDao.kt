@@ -41,4 +41,7 @@ interface UserDao {
 
     @Query("UPDATE user SET xp = (xp + :xpToAdd ) WHERE idToken = :idToken")
     suspend fun addXpById(idToken: String, xpToAdd: Int)
+
+    @Query("UPDATE user SET friendCount = (friendCount + 1) WHERE idToken = :idToken")
+    suspend fun addToFriendCountById(idToken: String)
 }

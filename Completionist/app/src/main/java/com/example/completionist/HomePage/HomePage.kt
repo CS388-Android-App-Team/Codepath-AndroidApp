@@ -21,6 +21,7 @@ import com.example.completionist.Quests.QuestDatabase
 import com.example.completionist.Quests.QuestViewModel
 import com.example.completionist.Quests.QuestViewModelFactory
 import com.example.completionist.R
+import com.example.completionist.UserViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -39,7 +40,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
     private lateinit var usersRef: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var currUser: FirebaseUser
-    //private lateinit var currUserData: User
+    private lateinit var userViewModel: UserViewModel // Initialize the UserViewModel variable
 
     private lateinit var questAdapter: QuestAdapter
     private lateinit var questViewModel: QuestViewModel
@@ -92,6 +93,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseAuth.currentUser?.let { us ->
             currUser = us }
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
        // val activity: MainActivity? = activity as MainActivity?
 
@@ -163,7 +165,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
 
-
+        //friend request stuff
         newFriendButton.setOnClickListener{
             val friendName = newFriendName.text
             usersRef.child(currUser.uid).get().addOnSuccessListener { us ->
@@ -176,10 +178,20 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
                         if (it.child("friends").child(currUser.uid).exists()) {
                             //check if they sent a request to you, if yes then mark completed. if already friends, do nothing
                             if (it.child("friends").child(currUser.uid).value == false) {
+                                //become friends
                                 usersRef.child(friendID).child("friends").child(currUser.uid)
                                     .setValue(true)
                                 usersRef.child(currUser.uid).child("friends").child(friendID)
                                     .setValue(true)
+                                //increment friend count
+                                usersRef.child(friendID).child("friendCount")
+                                    .setValue(it.child("friendCount").value.toString().toInt()+1)
+                                userViewModel.addToFriendCountById(friendID)
+
+                                usersRef.child(currUser.uid).child("friendCount")
+                                    .setValue(us.child("friendCount").value.toString().toInt()+1)
+                                userViewModel.addToFriendCountById(currUser.uid)
+
                                 Toast.makeText(activity, "New Companion!", Toast.LENGTH_SHORT)
                                     .show()
                             }
