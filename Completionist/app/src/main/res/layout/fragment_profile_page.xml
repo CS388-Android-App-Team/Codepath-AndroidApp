@@ -94,7 +94,7 @@
         android:fontFamily="@font/michroma"
         android:text="LVL:"
         android:textAlignment="center"
-        android:textSize="14sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView10"
         app:layout_constraintEnd_toEndOf="@+id/imageView10"
         app:layout_constraintStart_toStartOf="@+id/imageView10"
@@ -116,13 +116,13 @@
 
     <TextView
         android:id="@+id/xp_progress_textview"
-        android:layout_width="82dp"
-        android:layout_height="33dp"
+        android:layout_width="90dp"
+        android:layout_height="49dp"
         android:layout_marginTop="72dp"
         android:fontFamily="@font/michroma"
         android:text="50/100 XP to Level Up"
         android:textAlignment="center"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageView10"
         app:layout_constraintTop_toBottomOf="@+id/imageView9" />
