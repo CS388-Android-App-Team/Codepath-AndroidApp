@@ -1,6 +1,5 @@
 package com.example.completionist.HomePage
 
-import DummyQuestAdapter
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -12,13 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.completionist.Friend
-import com.example.completionist.MainActivity
 import com.example.completionist.OnNavigationItemClickListener
 import com.example.completionist.Quests.QuestAdapter
 import com.example.completionist.Quests.QuestDatabase
@@ -79,15 +75,17 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
     private fun updateQuests() {
         val questViewModel = ViewModelProvider(this).get(QuestViewModel::class.java)
 
-        questViewModel.getSortedQuests().observe(viewLifecycleOwner) { quests ->
-            // Update the adapter with the latest quests
-            questAdapter.updateQuests(quests)
+        questViewModel.getSortedQuestsForCurrentUser().observe(viewLifecycleOwner) { quests ->
+            // Filter out completed quests
+            val ongoingQuests = quests.filter { !it.isComplete }
+
+            // Update the adapter with the ongoing quests
+            questAdapter.updateQuests(ongoingQuests)
         }
     }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         database = Firebase.database
         usersRef = database.getReference("users")

@@ -84,7 +84,7 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         questViewModel.getSortedQuestsForCurrentUser().observe(viewLifecycleOwner) { quests ->
             quests?.let {
                 val ongoingQuests = it.filter { !it.isComplete && it.questDate == formattedDate }
-                val completedQuests = it.filter { it.isComplete && it.questDate == formattedDate }
+                val completedQuests = it.filter { it.isComplete }
 
                 ongoingQuestAdapter.updateQuests(ongoingQuests)
                 completedQuestAdapter.updateQuests(completedQuests)
