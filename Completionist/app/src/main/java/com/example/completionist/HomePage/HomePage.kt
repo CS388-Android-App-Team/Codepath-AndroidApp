@@ -110,7 +110,7 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         //this also sucks
         usersRef.get().addOnSuccessListener { users ->
             // var friendCount = users.child(currUser.uid).child("friends").childrenCount
-            fnameDisplay.text = users.child(currUser.uid).child("firstName").value.toString()
+            fnameDisplay.text = "Hi, " + users.child(currUser.uid).child("firstName").value.toString()
 
              users.child(currUser.uid).child("friends").children.forEach(){ friendListEntry ->
 
