@@ -81,10 +81,10 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         val formattedDate =
             currentDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.getDefault()))
 
-        questViewModel.getQuestsByDate(formattedDate).observe(viewLifecycleOwner) { quests ->
+        questViewModel.getSortedQuestsForCurrentUser().observe(viewLifecycleOwner) { quests ->
             quests?.let {
-                val ongoingQuests = it.filter { !it.isComplete }
-                val completedQuests = it.filter { it.isComplete }
+                val ongoingQuests = it.filter { !it.isComplete && it.questDate == formattedDate }
+                val completedQuests = it.filter { it.isComplete && it.questDate == formattedDate }
 
                 ongoingQuestAdapter.updateQuests(ongoingQuests)
                 completedQuestAdapter.updateQuests(completedQuests)
@@ -141,6 +141,10 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
             if (questName != null && questPoints != null && questDate != null) {
                 // Add the new quest using the data
                 addNewQuest(questName, questPoints, questDate)
+            }
+            else if (questName != null && questPoints != null && questDate == null) {
+                // Add the new quest using the data
+                addNewQuest(questName, questPoints, currentDate.toString())
             }
         }
     }
@@ -214,6 +218,7 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
         addNewQuestButton.setOnClickListener {
             val intent = Intent(requireContext(), AddNewTaskPage::class.java)
+            intent.putExtra("CURRENT_DATE", currentDate.format(dateFormatter))
             startActivityForResult(intent, ADD_NEW_QUEST_REQUEST_CODE)
         }
 

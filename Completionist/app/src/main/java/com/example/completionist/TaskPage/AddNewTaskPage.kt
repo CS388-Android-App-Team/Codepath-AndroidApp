@@ -37,8 +37,7 @@ class AddNewTaskPage : AppCompatActivity() {
                 questDate.text.toString()
             } else {
                 // Use the current selected date as default
-                val currentDate = intent.getStringExtra("CURRENT_DATE") ?: ""
-                currentDate
+                intent.getStringExtra("CURRENT_DATE")
             }
 
             // Get the user ID from your authentication system (Firebase, etc.)
@@ -53,6 +52,7 @@ class AddNewTaskPage : AppCompatActivity() {
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }
+
 
         declineButton.setOnClickListener {
             onBackPressed()
