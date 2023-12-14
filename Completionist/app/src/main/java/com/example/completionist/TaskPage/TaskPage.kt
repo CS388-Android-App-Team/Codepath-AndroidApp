@@ -40,7 +40,8 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
     private val ADD_NEW_QUEST_REQUEST_CODE = 123
     private var listener: OnNavigationItemClickListener? = null
-    private lateinit var questAdapter: QuestAdapter
+    private lateinit var ongoingQuestAdapter: QuestAdapter
+    private lateinit var completedQuestAdapter: QuestAdapter
     private lateinit var questViewModel: QuestViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -73,19 +74,17 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateQuestsAdapter() {
-        // Format the current date to match the database format
-        val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.getDefault()))
+        val formattedDate =
+            currentDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.getDefault()))
 
         questViewModel.getQuestsByDate(formattedDate).observe(viewLifecycleOwner) { quests ->
-            // Log the quests to check if they are being retrieved
             quests?.let {
-                for (quest in it) {
-                    println("Quest Name: ${quest.questName}, Points: ${quest.questPoints}, Date: ${quest.questDate}")
-                }
-            }
+                val ongoingQuests = it.filter { !it.isComplete }
+                val completedQuests = it.filter { it.isComplete }
 
-            // Update the adapter with the latest quests
-            questAdapter.updateQuests(quests.orEmpty())
+                ongoingQuestAdapter.updateQuests(ongoingQuests)
+                completedQuestAdapter.updateQuests(completedQuests)
+            }
         }
     }
 
@@ -95,9 +94,11 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
             listener = context
             val questDatabase = QuestDatabase.getDatabase(requireContext())
             val questDao = questDatabase.questDao()
-            questAdapter = QuestAdapter(mutableListOf(), context, questDao)
-            questViewModel = ViewModelProvider(this, QuestViewModelFactory(requireActivity().application))
-                .get(QuestViewModel::class.java)
+            ongoingQuestAdapter = QuestAdapter(mutableListOf(), context, questDao)
+            completedQuestAdapter = QuestAdapter(mutableListOf(), context, questDao)
+            questViewModel =
+                ViewModelProvider(this, QuestViewModelFactory(requireActivity().application))
+                    .get(QuestViewModel::class.java)
         } else {
             throw RuntimeException("$context must implement OnNavigationItemClickListener")
         }
@@ -147,19 +148,40 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         }
     }
 
+    private fun completeQuest(quest: Quest) {
+        quest.isComplete = true
+        lifecycleScope.launch {
+            val questDatabase = QuestDatabase.getDatabase(requireContext())
+            val questDao = questDatabase.questDao()
+
+            // Remove the quest from ongoingQuestRecyclerView
+            ongoingQuestAdapter.removeQuest(quest)
+
+            // Add the quest to completedQuestRecyclerView
+            completedQuestAdapter.addQuest(quest)
+
+            // Update the quest in the database
+            questDao.update(quest)
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val questRecyclerView = view.findViewById<RecyclerView>(R.id.ongoing_quests_recycler_view)
+        val ongoingQuestRecyclerView =
+            view.findViewById<RecyclerView>(R.id.ongoing_quests_recycler_view)
+        val completedQuestRecyclerView =
+            view.findViewById<RecyclerView>(R.id.completed_quests_recycler_view)
 
-        val layoutManagerQuest = GridLayoutManager(requireContext(), 2)
+        val ongoingQuestLayoutManager = GridLayoutManager(requireContext(), 2)
+        val completedQuestLayoutManager = GridLayoutManager(requireContext(), 2)
 
-        questRecyclerView.layoutManager = layoutManagerQuest
-        questRecyclerView.adapter = questAdapter
-
+        ongoingQuestRecyclerView.layoutManager = ongoingQuestLayoutManager
+        completedQuestRecyclerView.layoutManager = completedQuestLayoutManager
 
         val addNewQuestButton = view.findViewById<ImageView>(R.id.add_new_quest_button_task)
+        val completeButton = view.findViewById<ImageView>(R.id.complete_button)
 
         dateText = view.findViewById(R.id.selected_date_text)
         changeDateArrowRight = view.findViewById(R.id.change_date_arrow_forward)
@@ -168,7 +190,15 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         // Set initial date
         updateDateText()
 
-        addTempQuests()
+        // Set up the complete button click listener
+        completeButton.setOnClickListener {
+            // For demonstration purposes, let's assume you want to complete the first ongoing quest
+            ongoingQuestAdapter.getAllQuests().firstOrNull()?.let { firstOngoingQuest ->
+                completeQuest(firstOngoingQuest)
+                // Update the adapters after completing the quest
+                updateQuestsAdapter()
+            }
+        }
 
         // Handle arrow clicks
         changeDateArrowRight.setOnClickListener {
@@ -201,5 +231,12 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         profilePageNav.setOnClickListener {
             listener?.onProfileClicked()
         }
+
+        // Set up the adapters after all the UI components are initialized
+        ongoingQuestRecyclerView.adapter = ongoingQuestAdapter
+        completedQuestRecyclerView.adapter = completedQuestAdapter
+
+        // Load temporary quests
+        addTempQuests()
     }
 }

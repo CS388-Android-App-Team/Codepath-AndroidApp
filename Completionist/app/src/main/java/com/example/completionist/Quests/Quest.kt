@@ -21,7 +21,7 @@ data class Quest(
     val questDate: String?, // Assuming your date is stored as a String, you might want to use a proper Date type
 
     @ColumnInfo(name = "is_complete")
-    val isComplete: Boolean
+    var isComplete: Boolean
 ) : Parcelable {
 
     // Primary constructor used for creating instances in your code

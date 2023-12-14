@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class QuestAdapter(
     private val questList: MutableList<Quest>,
     private val context: Context,
-    private val questDao: QuestDao
+    private val questDao: QuestDao,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_QUEST = 1
@@ -75,13 +75,6 @@ class QuestAdapter(
 
                      */
 
-                    // Quest is marked as complete, remove it from the list and database
-                    questList.remove(quest)
-                    notifyDataSetChanged()
-                    // Delete from the database
-                    GlobalScope.launch {
-                        questDao.delete(quest)
-                    }
                 }
 
             }
@@ -96,8 +89,14 @@ class QuestAdapter(
                 // Set up more options click listener
                 holder.moreOptions.setOnClickListener { showPopupMenu(holder.moreOptions, quest) }
             } else {
-                // Hide or handle completed quests as needed
-                holder.itemView.visibility = View.GONE
+                // Display the quest details as usual
+                holder.questName?.text = quest.questName
+                holder.questPoints?.text = "+" + quest.questPoints.toString()
+                holder.questDate?.text = quest.questDate.toString()
+                holder.complete?.isChecked = quest.isComplete
+
+                // Set up more options click listener
+                holder.moreOptions.setOnClickListener { showPopupMenu(holder.moreOptions, quest) }
             }
         }
     }
@@ -106,6 +105,21 @@ class QuestAdapter(
         questList.clear()
         questList.addAll(newQuests.filterNotNull())
         notifyDataSetChanged()
+    }
+
+    // Add these methods
+    fun removeQuest(quest: Quest) {
+        questList.remove(quest)
+        notifyDataSetChanged()
+    }
+
+    fun addQuest(quest: Quest) {
+        questList.add(quest)
+        notifyDataSetChanged()
+    }
+
+    fun getAllQuests(): List<Quest> {
+        return questList.toList() // Returns a copy of the questList
     }
 
     override fun getItemCount(): Int {
