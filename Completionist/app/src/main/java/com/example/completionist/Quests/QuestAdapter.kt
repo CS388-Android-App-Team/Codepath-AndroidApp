@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.completionist.MainActivity
 import com.example.completionist.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -68,6 +66,21 @@ class QuestAdapter(
                 // Set the checked state without triggering the listener
                 holder.complete?.isChecked = quest.isComplete
 
+                // Disable the checkbox if the quest is complete
+                holder.complete?.isEnabled = !quest.isComplete
+
+                // Set up the new listener
+                holder.complete?.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        if (!quest.isComplete) {
+                            // Mark the quest as complete
+                            quest.isComplete = true
+                        } else {
+                            // If the quest is already complete, prevent unchecking
+                            holder.complete?.isChecked = true
+                        }
+                    }
+                }
 
                 // Display the quest details as usual
                 holder.questName?.text = quest.questName

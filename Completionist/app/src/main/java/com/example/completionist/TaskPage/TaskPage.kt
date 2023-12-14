@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -158,6 +159,7 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
     private fun completeQuest(quest: Quest) {
         quest.isComplete = true
+        println("Completing quest: $quest")
         //xp gain
         if(quest.questPoints!=null){
             Log.i("Leveling", "task to add ${quest.questName} for ${quest.questPoints} points")
@@ -208,11 +210,18 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
         // Set up the complete button click listener
         completeButton.setOnClickListener {
-            // For demonstration purposes, let's assume you want to complete the first ongoing quest
-            ongoingQuestAdapter.getAllQuests().firstOrNull()?.let { firstOngoingQuest ->
+            println("Complete button clicked")
+            // Filter the ongoing quests to get only the completed ones
+            val completedQuests = ongoingQuestAdapter.getAllQuests().filter { it.isComplete }
 
-                completeQuest(firstOngoingQuest)
-                // Update the adapters after completing the quest
+            // Check if there are completed quests
+            if (completedQuests.isNotEmpty()) {
+                // For each completed quest, complete it
+                completedQuests.forEach { completedQuest ->
+                    completeQuest(completedQuest)
+                }
+
+                // Update the adapters after completing the quests
                 updateQuestsAdapter()
             }
             //TODO = () xp into online and room db
