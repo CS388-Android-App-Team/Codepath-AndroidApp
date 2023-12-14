@@ -249,12 +249,12 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
         usersRef.child(userId).get()
             .addOnSuccessListener {
                 Log.i("Leveling", "Current User $userId")
-                var currXp = it.child("xp").value.toString().toInt()
-                var currLevel = it.child("level").value.toString().toInt()
+                val currXp = it.child("xp").value.toString().toInt()
+                val currLevel = it.child("level").value.toString().toInt()
                 Log.i("Leveling", "Current Level $currLevel")
-                var nXp = currXp + aggXp
+                val nXp = currXp + aggXp
                 Log.i("Leveling", "New XP Total $nXp")
-                var nLevel = nXp/100
+                val nLevel = nXp/100
                 Log.i("Leveling", "New Level $nLevel")
                 //level up process
 
@@ -265,9 +265,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
                 usersRef.child(userId).updateChildren(userData)
                     .addOnSuccessListener {
                         userViewModel.addXpById(userId, aggXp)
-                        if (nLevel != null) {
-                            userViewModel.updateLevelById(userId, nLevel)
-                        }
+                        userViewModel.updateLevelById(userId, nLevel)
 
                         // Notify the user about the successful gain
                         Toast.makeText(this, "You gained $aggXp xp", Toast.LENGTH_SHORT).show()
