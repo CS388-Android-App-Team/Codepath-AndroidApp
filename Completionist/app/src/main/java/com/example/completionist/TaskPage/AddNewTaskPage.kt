@@ -6,8 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -26,15 +29,46 @@ class AddNewTaskPage : AppCompatActivity() {
         val questName = findViewById<EditText>(R.id.quest_name)
         val questPoints = findViewById<EditText>(R.id.XP_amount)
         val questDate = findViewById<EditText>(R.id.quest_date)
+        val charCountTextView = findViewById<TextView>(R.id.char_count_text)
 
         val acceptButton = findViewById<ImageView>(R.id.accept_button)
         val declineButton = findViewById<ImageView>(R.id.decline_button)
 
         val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
+        // TextWatcher to update character count in real-time
+        questName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val remainingChars = 16 - s?.length!! ?: 0
+                charCountTextView.text = "Characters left: $remainingChars"
+            }
+        })
+
         acceptButton.setOnClickListener {
             val questNameText = questName.text.toString()
-            val questPointsText = questPoints.text.toString().toInt()
+
+            // Check if questName is empty
+            if (questNameText.isEmpty()) {
+                showCustomToast(this, "Please enter a Quest Name")
+                return@setOnClickListener
+            }
+
+            // Check questName length
+            if (questNameText.length > 16) {
+                showCustomToast(this, "Quest name must be 16 characters or less")
+                return@setOnClickListener
+            }
+
+            // Check if questPoints is a valid number between 1 and 10
+            val questPointsText = questPoints.text.toString().toIntOrNull()
+            if (questPointsText == null || questPointsText !in 1..10) {
+                showCustomToast(this, "Please enter a valid quest points number between 1 and 10")
+                return@setOnClickListener
+            }
 
             // Check if quest_date is empty
             val questDateText = questDate.text.toString()
@@ -66,7 +100,6 @@ class AddNewTaskPage : AppCompatActivity() {
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }
-
 
         declineButton.setOnClickListener {
             onBackPressed()

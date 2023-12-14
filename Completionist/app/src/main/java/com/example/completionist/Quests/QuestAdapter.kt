@@ -72,6 +72,7 @@ class QuestAdapter(
                 // Set up the new listener
                 holder.complete?.setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {
+                        quest.isComplete = true
                         /*add xp to user
                    var oldXP: Int? = MainActivity().currentUserData?.xp
                    var moreXP: Int? = questXp

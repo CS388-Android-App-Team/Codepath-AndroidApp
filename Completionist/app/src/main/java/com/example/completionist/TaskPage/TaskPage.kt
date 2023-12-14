@@ -151,6 +151,7 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
     private fun completeQuest(quest: Quest) {
         quest.isComplete = true
+        println("Completing quest: $quest")
         lifecycleScope.launch {
             val questDatabase = QuestDatabase.getDatabase(requireContext())
             val questDao = questDatabase.questDao()
@@ -195,10 +196,18 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
         // Set up the complete button click listener
         completeButton.setOnClickListener {
-            // For demonstration purposes, let's assume you want to complete the first ongoing quest
-            ongoingQuestAdapter.getAllQuests().firstOrNull()?.let { firstOngoingQuest ->
-                completeQuest(firstOngoingQuest)
-                // Update the adapters after completing the quest
+            println("Complete button clicked")
+            // Filter the ongoing quests to get only the completed ones
+            val completedQuests = ongoingQuestAdapter.getAllQuests().filter { it.isComplete }
+
+            // Check if there are completed quests
+            if (completedQuests.isNotEmpty()) {
+                // For each completed quest, complete it
+                completedQuests.forEach { completedQuest ->
+                    completeQuest(completedQuest)
+                }
+
+                // Update the adapters after completing the quests
                 updateQuestsAdapter()
             }
         }
