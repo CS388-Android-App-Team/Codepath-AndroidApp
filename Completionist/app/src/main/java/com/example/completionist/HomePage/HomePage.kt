@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -164,6 +165,16 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         val homePageNav = view.findViewById<View>(R.id.home_nav)
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
         val profilePageNav = view.findViewById<View>(R.id.profile_nav)
+
+        newFriendName.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                // Keyboard is shown
+                activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+            } else {
+                // Keyboard is hidden
+                activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            }
+        }
 
         //friend request stuff
         newFriendButton.setOnClickListener{
