@@ -1,7 +1,6 @@
 package com.example.completionist.Quests
 
 import androidx.lifecycle.LiveData
-import com.example.completionist.User
 
 // QuestRepository.kt
 class QuestRepository(private val questDao: QuestDao) {
@@ -11,7 +10,15 @@ class QuestRepository(private val questDao: QuestDao) {
         return questDao.getQuestsByDate(date)
     }
 
-    suspend fun insert(quest: Quest) {
-        questDao.insert(quest)
+    fun getSortedQuests(): LiveData<List<Quest>> {
+        return questDao.getSortedQuests()
+    }
+
+    fun getSortedQuestsForUser(userId: String): LiveData<List<Quest>> {
+        return questDao.getSortedQuestsForUser(userId)
+    }
+
+    fun getQuestsByDateForUser(date: String, userId: String): LiveData<List<Quest>> {
+        return questDao.getQuestsByDateForUser(date, userId)
     }
 }

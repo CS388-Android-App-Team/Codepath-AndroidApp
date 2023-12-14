@@ -20,7 +20,7 @@
         android:id="@+id/quest_date"
         android:layout_width="254dp"
         android:layout_height="51dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="36dp"
         android:ems="10"
         android:hint="Quest Date (ex: 12/11/2023)"
@@ -56,7 +56,7 @@
         android:id="@+id/quest_name"
         android:layout_width="254dp"
         android:layout_height="51dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="92dp"
         android:ems="10"
         android:hint="Quest Name"
@@ -66,13 +66,15 @@
 
     <EditText
         android:id="@+id/XP_amount"
-        android:layout_width="75dp"
+        android:layout_width="80dp"
         android:layout_height="50dp"
-        android:layout_marginStart="26dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="175dp"
+        android:layout_marginEnd="15dp"
         android:ems="10"
         android:hint="XP (1-10)"
         android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/quest_name"
         app:layout_constraintTop_toTopOf="parent" />
 

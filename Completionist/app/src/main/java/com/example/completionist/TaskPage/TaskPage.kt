@@ -21,6 +21,7 @@ import com.example.completionist.Quests.QuestDatabase
 import com.example.completionist.Quests.QuestViewModel
 import com.example.completionist.Quests.QuestViewModelFactory
 import com.example.completionist.R
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -40,7 +41,8 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
     private val ADD_NEW_QUEST_REQUEST_CODE = 123
     private var listener: OnNavigationItemClickListener? = null
-    private lateinit var questAdapter: QuestAdapter
+    private lateinit var ongoingQuestAdapter: QuestAdapter
+    private lateinit var completedQuestAdapter: QuestAdapter
     private lateinit var questViewModel: QuestViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -49,7 +51,10 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         questPoints: Int?,
         questDate: String?
     ) {
+        val currentUserId = getCurrentUserId()
+
         val newQuest = Quest(
+            userId = currentUserId,
             questName = questName,
             questPoints = questPoints,
             questDate = questDate,
@@ -73,23 +78,19 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateQuestsAdapter() {
-        // Format the current date to match the database format
-        val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.getDefault()))
+        val formattedDate =
+            currentDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.getDefault()))
 
-        questViewModel.getQuestsByDate(formattedDate).observe(viewLifecycleOwner) { quests ->
-            // Log the quests to check if they are being retrieved
+        questViewModel.getSortedQuestsForCurrentUser().observe(viewLifecycleOwner) { quests ->
             quests?.let {
-                for (quest in it) {
-                    println("Quest Name: ${quest.questName}, Points: ${quest.questPoints}, Date: ${quest.questDate}")
-                }
-            }
+                val ongoingQuests = it.filter { !it.isComplete && it.questDate == formattedDate }
+                val completedQuests = it.filter { it.isComplete }
 
-            // Update the adapter with the latest quests
-            questAdapter.updateQuests(quests.orEmpty())
+                ongoingQuestAdapter.updateQuests(ongoingQuests)
+                completedQuestAdapter.updateQuests(completedQuests)
+            }
         }
     }
-
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -97,12 +98,28 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
             listener = context
             val questDatabase = QuestDatabase.getDatabase(requireContext())
             val questDao = questDatabase.questDao()
-            questAdapter = QuestAdapter(mutableListOf(), context, questDao)
-            questViewModel = ViewModelProvider(this, QuestViewModelFactory(requireActivity().application))
-                .get(QuestViewModel::class.java)
+
+            // Get the current user ID
+            val currentUserId = getCurrentUserId()
+
+            // Pass the user ID to the QuestViewModel
+            questViewModel = ViewModelProvider(
+                this,
+                QuestViewModelFactory(requireActivity().application, currentUserId)
+            ).get(QuestViewModel::class.java)
+
+            ongoingQuestAdapter = QuestAdapter(mutableListOf(), context, questDao, currentUserId)
+            completedQuestAdapter = QuestAdapter(mutableListOf(), context, questDao, currentUserId)
         } else {
             throw RuntimeException("$context must implement OnNavigationItemClickListener")
         }
+    }
+
+
+    private fun getCurrentUserId(): String {
+        // Assuming you have the Firebase user
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        return firebaseUser?.uid ?: ""
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -125,27 +142,27 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
                 // Add the new quest using the data
                 addNewQuest(questName, questPoints, questDate)
             }
+            else if (questName != null && questPoints != null && questDate == null) {
+                // Add the new quest using the data
+                addNewQuest(questName, questPoints, currentDate.toString())
+            }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun addTempQuests() {
-        // Add some temporary quests for testing
-        val quest1 = Quest("Quest 1", 10, currentDate.toString(), false)
-        val quest2 = Quest("Quest 2", 20, currentDate.toString(), false)
-        val quest3 = Quest("Quest 3", 15, currentDate.toString(), false)
-
+    private fun completeQuest(quest: Quest) {
+        quest.isComplete = true
         lifecycleScope.launch {
             val questDatabase = QuestDatabase.getDatabase(requireContext())
             val questDao = questDatabase.questDao()
 
-            // Insert temporary quests into the database
-            questDao.insert(quest1)
-            questDao.insert(quest2)
-            questDao.insert(quest3)
+            // Remove the quest from ongoingQuestRecyclerView
+            ongoingQuestAdapter.removeQuest(quest)
 
-            // Update the UI with the latest data
-            updateQuestsAdapter()
+            // Add the quest to completedQuestRecyclerView
+            completedQuestAdapter.addQuest(quest)
+
+            // Update the quest in the database
+            questDao.update(quest)
         }
     }
 
@@ -153,17 +170,19 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val questRecyclerView = view.findViewById<RecyclerView>(R.id.quests_recycler_view)
+        val ongoingQuestRecyclerView =
+            view.findViewById<RecyclerView>(R.id.ongoing_quests_recycler_view)
+        val completedQuestRecyclerView =
+            view.findViewById<RecyclerView>(R.id.completed_quests_recycler_view)
 
-        val layoutManagerQuest = GridLayoutManager(requireContext(), 2)
+        val ongoingQuestLayoutManager = GridLayoutManager(requireContext(), 2)
+        val completedQuestLayoutManager = GridLayoutManager(requireContext(), 2)
 
-        questRecyclerView.layoutManager = layoutManagerQuest
-        questRecyclerView.adapter = questAdapter
-
-        // Add some temporary quests for testing
-        addTempQuests()
+        ongoingQuestRecyclerView.layoutManager = ongoingQuestLayoutManager
+        completedQuestRecyclerView.layoutManager = completedQuestLayoutManager
 
         val addNewQuestButton = view.findViewById<ImageView>(R.id.add_new_quest_button_task)
+        val completeButton = view.findViewById<ImageView>(R.id.complete_button)
 
         dateText = view.findViewById(R.id.selected_date_text)
         changeDateArrowRight = view.findViewById(R.id.change_date_arrow_forward)
@@ -171,6 +190,18 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
         // Set initial date
         updateDateText()
+
+        updateQuestsAdapter()
+
+        // Set up the complete button click listener
+        completeButton.setOnClickListener {
+            // For demonstration purposes, let's assume you want to complete the first ongoing quest
+            ongoingQuestAdapter.getAllQuests().firstOrNull()?.let { firstOngoingQuest ->
+                completeQuest(firstOngoingQuest)
+                // Update the adapters after completing the quest
+                updateQuestsAdapter()
+            }
+        }
 
         // Handle arrow clicks
         changeDateArrowRight.setOnClickListener {
@@ -187,6 +218,7 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
         addNewQuestButton.setOnClickListener {
             val intent = Intent(requireContext(), AddNewTaskPage::class.java)
+            intent.putExtra("CURRENT_DATE", currentDate.format(dateFormatter))
             startActivityForResult(intent, ADD_NEW_QUEST_REQUEST_CODE)
         }
 
@@ -203,5 +235,9 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         profilePageNav.setOnClickListener {
             listener?.onProfileClicked()
         }
+
+        // Set up the adapters after all the UI components are initialized
+        ongoingQuestRecyclerView.adapter = ongoingQuestAdapter
+        completedQuestRecyclerView.adapter = completedQuestAdapter
     }
 }

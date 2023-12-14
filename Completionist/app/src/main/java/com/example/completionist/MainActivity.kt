@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity(), OnNavigationItemClickListener {
 
     private lateinit var userViewModel: UserViewModel // Initialize the UserViewModel variable
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
