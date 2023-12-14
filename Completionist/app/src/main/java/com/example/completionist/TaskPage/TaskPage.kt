@@ -21,6 +21,7 @@ import com.example.completionist.Quests.QuestDatabase
 import com.example.completionist.Quests.QuestViewModel
 import com.example.completionist.Quests.QuestViewModelFactory
 import com.example.completionist.R
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -50,7 +51,10 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         questPoints: Int?,
         questDate: String?
     ) {
+        val currentUserId = getCurrentUserId()
+
         val newQuest = Quest(
+            userId = currentUserId,
             questName = questName,
             questPoints = questPoints,
             questDate = questDate,
@@ -94,14 +98,28 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
             listener = context
             val questDatabase = QuestDatabase.getDatabase(requireContext())
             val questDao = questDatabase.questDao()
-            ongoingQuestAdapter = QuestAdapter(mutableListOf(), context, questDao)
-            completedQuestAdapter = QuestAdapter(mutableListOf(), context, questDao)
-            questViewModel =
-                ViewModelProvider(this, QuestViewModelFactory(requireActivity().application))
-                    .get(QuestViewModel::class.java)
+
+            // Get the current user ID
+            val currentUserId = getCurrentUserId()
+
+            // Pass the user ID to the QuestViewModel
+            questViewModel = ViewModelProvider(
+                this,
+                QuestViewModelFactory(requireActivity().application, currentUserId)
+            ).get(QuestViewModel::class.java)
+
+            ongoingQuestAdapter = QuestAdapter(mutableListOf(), context, questDao, currentUserId)
+            completedQuestAdapter = QuestAdapter(mutableListOf(), context, questDao, currentUserId)
         } else {
             throw RuntimeException("$context must implement OnNavigationItemClickListener")
         }
+    }
+
+
+    private fun getCurrentUserId(): String {
+        // Assuming you have the Firebase user
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        return firebaseUser?.uid ?: ""
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -124,27 +142,6 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
                 // Add the new quest using the data
                 addNewQuest(questName, questPoints, questDate)
             }
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun addTempQuests() {
-        // Add some temporary quests for testing
-        val quest1 = Quest("Quest 1", 10, currentDate.toString(), false)
-        val quest2 = Quest("Quest 2", 20, currentDate.toString(), false)
-        val quest3 = Quest("Quest 3", 15, currentDate.toString(), false)
-
-        lifecycleScope.launch {
-            val questDatabase = QuestDatabase.getDatabase(requireContext())
-            val questDao = questDatabase.questDao()
-
-            // Insert temporary quests into the database
-            questDao.insert(quest1)
-            questDao.insert(quest2)
-            questDao.insert(quest3)
-
-            // Update the UI with the latest data
-            updateQuestsAdapter()
         }
     }
 
@@ -189,6 +186,8 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
 
         // Set initial date
         updateDateText()
+
+        updateQuestsAdapter()
 
         // Set up the complete button click listener
         completeButton.setOnClickListener {
@@ -235,8 +234,5 @@ class TaskPage : Fragment(R.layout.fragment_task_page) {
         // Set up the adapters after all the UI components are initialized
         ongoingQuestRecyclerView.adapter = ongoingQuestAdapter
         completedQuestRecyclerView.adapter = completedQuestAdapter
-
-        // Load temporary quests
-        addTempQuests()
     }
 }

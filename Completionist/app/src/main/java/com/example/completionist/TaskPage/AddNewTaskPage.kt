@@ -9,7 +9,7 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.completionist.R
-import java.time.LocalDate
+import com.google.firebase.auth.FirebaseAuth
 import java.time.format.DateTimeFormatter
 
 class AddNewTaskPage : AppCompatActivity() {
@@ -41,18 +41,28 @@ class AddNewTaskPage : AppCompatActivity() {
                 currentDate
             }
 
+            // Get the user ID from your authentication system (Firebase, etc.)
+            val userId = getCurrentUserId() // Replace this with your actual method to get the user ID
+
             val resultIntent = Intent()
             resultIntent.putExtra("QUEST_NAME", questNameText)
             resultIntent.putExtra("QUEST_POINTS", questPointsText)
             resultIntent.putExtra("QUEST_DATE", questDateText)
+            resultIntent.putExtra("USER_ID", userId)
 
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }
 
         declineButton.setOnClickListener {
-            val intent = Intent(this, TaskPage::class.java)
-            startActivity(intent)
+            onBackPressed()
         }
+    }
+
+    // Replace this with your actual method to get the user ID (Firebase, etc.)
+    private fun getCurrentUserId(): String {
+        // Assuming you have the Firebase user
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        return firebaseUser?.uid ?: ""
     }
 }

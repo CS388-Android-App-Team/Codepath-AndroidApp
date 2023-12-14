@@ -1,7 +1,6 @@
 package com.example.completionist.Quests
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -20,6 +19,7 @@ class QuestAdapter(
     private val questList: MutableList<Quest>,
     private val context: Context,
     private val questDao: QuestDao,
+    private val userId: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_QUEST = 1
@@ -54,56 +54,50 @@ class QuestAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is QuestViewHolder) {
-
-
             val quest = questList[position]
-            val questXp = quest.questPoints
 
-            holder.complete?.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
+            // Only bind the quest if it belongs to the current user
+            if (quest.userId == userId) {
+                val questXp = quest.questPoints
 
-                    /*add xp to user
-                    var oldXP: Int? = MainActivity().currentUserData?.xp
-                    var moreXP: Int? = questXp
-                    Log.i("User Level", "Old XP + Completion XP: $oldXP + $moreXP}")
-                    if (oldXP != null && moreXP != null) {
-                        MainActivity().updateCurrentUser(newXp = (oldXP + moreXP))
-                        //update realtime database here = TODO()
-                        Log.i("User Level", "New XP: ${oldXP + moreXP}")
-                        Toast.makeText(MainActivity(), "You gained $moreXP XP", Toast.LENGTH_SHORT).show()
+                // Set up more options click listener
+                holder.moreOptions.setOnClickListener { showPopupMenu(holder.moreOptions, quest) }
+
+                // Remove the previous listener to avoid conflicts
+                holder.complete?.setOnCheckedChangeListener(null)
+
+                // Set the checked state without triggering the listener
+                holder.complete?.isChecked = quest.isComplete
+
+                // Set up the new listener
+                holder.complete?.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        /*add xp to user
+                   var oldXP: Int? = MainActivity().currentUserData?.xp
+                   var moreXP: Int? = questXp
+                   Log.i("User Level", "Old XP + Completion XP: $oldXP + $moreXP}")
+                   if (oldXP != null && moreXP != null) {
+                       MainActivity().updateCurrentUser(newXp = (oldXP + moreXP))
+                       //update realtime database here = TODO()
+                       Log.i("User Level", "New XP: ${oldXP + moreXP}")
+                       Toast.makeText(MainActivity(), "You gained $moreXP XP", Toast.LENGTH_SHORT).show()
+                   }
+
+                    */
                     }
-
-                     */
-
                 }
 
-            }
-
-            if (!quest.isComplete) {
                 // Display the quest details as usual
                 holder.questName?.text = quest.questName
                 holder.questPoints?.text = "+" + quest.questPoints.toString()
                 holder.questDate?.text = quest.questDate.toString()
-                holder.complete?.isChecked = quest.isComplete
-
-                // Set up more options click listener
-                holder.moreOptions.setOnClickListener { showPopupMenu(holder.moreOptions, quest) }
-            } else {
-                // Display the quest details as usual
-                holder.questName?.text = quest.questName
-                holder.questPoints?.text = "+" + quest.questPoints.toString()
-                holder.questDate?.text = quest.questDate.toString()
-                holder.complete?.isChecked = quest.isComplete
-
-                // Set up more options click listener
-                holder.moreOptions.setOnClickListener { showPopupMenu(holder.moreOptions, quest) }
             }
         }
     }
 
     fun updateQuests(newQuests: List<Quest?>) {
         questList.clear()
-        questList.addAll(newQuests.filterNotNull())
+        questList.addAll(newQuests.filterNotNull().filter { it.userId == userId })
         notifyDataSetChanged()
     }
 

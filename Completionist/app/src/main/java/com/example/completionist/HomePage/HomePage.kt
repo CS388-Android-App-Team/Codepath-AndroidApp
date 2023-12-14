@@ -48,6 +48,11 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
     private lateinit var questAdapter: QuestAdapter
     private lateinit var questViewModel: QuestViewModel
 
+    private fun getCurrentUserId(): String {
+        // Assuming you have the Firebase user
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        return firebaseUser?.uid ?: ""
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -55,10 +60,17 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
             listener = context
             val questDatabase = QuestDatabase.getDatabase(requireContext())
             val questDao = questDatabase.questDao()
-            questAdapter = QuestAdapter(mutableListOf(), requireContext(), questDao, true)
-            questViewModel =
-                ViewModelProvider(this, QuestViewModelFactory(requireActivity().application))
-                    .get(QuestViewModel::class.java)
+
+            // Get the current user ID
+            val currentUserId = getCurrentUserId()
+
+            // Pass the user ID to the QuestViewModel
+            questViewModel = ViewModelProvider(
+                this,
+                QuestViewModelFactory(requireActivity().application, currentUserId)
+            ).get(QuestViewModel::class.java)
+
+            questAdapter = QuestAdapter(mutableListOf(), context, questDao, currentUserId)
         } else {
             throw RuntimeException("$context must implement OnNavigationItemClickListener")
         }
@@ -86,8 +98,6 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
        // val activity: MainActivity? = activity as MainActivity?
 
         val formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.getDefault()))
-
-        val dummyQuestList = questViewModel.getQuestsByDate(formattedDate)
 
         val friendList = mutableListOf<Friend>()
         val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
@@ -129,10 +139,6 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
             partyRecyclerView.adapter = PartyAdapter(friendList)
         }
 
-
-
-
-
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)
       //  val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
      //   val usernameDisplay = view.findViewById<TextView>(R.id.username)
@@ -147,7 +153,6 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 //        }
         //val layoutManagerParty = LinearLayoutManager(requireContext())
 
-        val questAdapter = QuestAdapter(questList)
       //  val partyMemberAdapter = PartyAdapter(friendList)
 
         questRecyclerView.layoutManager = layoutManagerQuest
@@ -213,6 +218,9 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         profilePageNav.setOnClickListener{
             listener?.onProfileClicked()
         }
+
+        // Add a method to update quests when the fragment is created
+        updateQuests()
 
     }
 }

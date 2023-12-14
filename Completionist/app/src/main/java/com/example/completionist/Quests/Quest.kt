@@ -11,6 +11,9 @@ data class Quest(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 
+    @ColumnInfo
+    val userId: String,
+
     @ColumnInfo(name = "quest_name")
     val questName: String?,
 
@@ -26,22 +29,27 @@ data class Quest(
 
     // Primary constructor used for creating instances in your code
     constructor(
+        userId: String,
         questName: String?,
         questPoints: Int?,
         questDate: String?,
         isComplete: Boolean
-    ) : this(0, questName, questPoints, questDate, isComplete)
+    ) : this(0, userId, questName, questPoints, questDate, isComplete)
 
     // Parcelable implementation
 
     constructor(parcel: Parcel) : this(
+        parcel.readLong(),
         parcel.readString() ?: "",
+        parcel.readString(),
         parcel.readInt(),
         parcel.readString(),
         parcel.readByte() != 0.toByte()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id)
+        parcel.writeString(userId)
         parcel.writeString(questName)
         questPoints?.let { parcel.writeInt(it) }
         parcel.writeString(questDate)
