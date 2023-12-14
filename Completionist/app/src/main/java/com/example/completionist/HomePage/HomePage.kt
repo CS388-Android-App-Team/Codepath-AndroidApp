@@ -107,11 +107,13 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 
         partyRecyclerView.layoutManager = layoutManagerParty
 
-        //this also sucks
-        usersRef.get().addOnSuccessListener { users ->
-            // var friendCount = users.child(currUser.uid).child("friends").childrenCount
-            fnameDisplay.text = "Hi, " + users.child(currUser.uid).child("firstName").value.toString()
 
+        userViewModel.getUserById(currUser.uid).observe(viewLifecycleOwner){user ->
+            fnameDisplay.text = "Hi, " + user?.firstName
+        }
+
+        //friend display
+        usersRef.get().addOnSuccessListener { users ->
              users.child(currUser.uid).child("friends").children.forEach(){ friendListEntry ->
 
                  val friendObject = friendListEntry.key?.let { users.child(it) }
@@ -141,8 +143,6 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
         }
 
         val questRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_quests)
-      //  val partyRecyclerView = view.findViewById<RecyclerView>(R.id.home_page_party)
-     //   val usernameDisplay = view.findViewById<TextView>(R.id.username)
         val newFriendButton = view.findViewById<Button>(R.id.addFriendButton)
         val newFriendName = view.findViewById<EditText>(R.id.newCompanionEntry)
 
@@ -152,15 +152,9 @@ class HomePage : Fragment(R.layout.fragment_home_page) {
 //                return if (position % 2 == 0) 2 else 1
 //            }
 //        }
-        //val layoutManagerParty = LinearLayoutManager(requireContext())
-
-      //  val partyMemberAdapter = PartyAdapter(friendList)
 
         questRecyclerView.layoutManager = layoutManagerQuest
         questRecyclerView.adapter = questAdapter
-       // partyRecyclerView.adapter = partyMemberAdapter
-
-
 
         val homePageNav = view.findViewById<View>(R.id.home_nav)
         val taskPageNav = view.findViewById<View>(R.id.task_nav)
