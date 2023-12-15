@@ -168,4 +168,5 @@ Tasks
 
 ## App Demo Video
 
-- Embed the YouTube/Vimeo link of your Completed Demo Day prep video
+https://docs.google.com/presentation/d/1HvCvKOOivA5q3z9Kk4nM1K0AW7WKXeuKdgh2MxZmTKM/edit?usp=sharing
+Our class did a live demo day so there is no video, demo gifs of different features are included in the slide deck.
